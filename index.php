@@ -15,5 +15,5 @@ $twig = new Twig_Environment($loader, array(
 ));
 
 
-$template = $twig->loadTemplate('home.twig');
-echo $template->render(array());
+$template = $twig->loadTemplate('index.html.twig');
+echo $template->render(array('cache' => false, 'auto_reload' => true));
