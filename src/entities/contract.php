@@ -8,5 +8,28 @@
  */
 class contract
 {
+  /**
+   * 'contracts' table
+   * 
+   * ID
+   * Company (SupplierID, UtilityID, CustomerID)
+   * SupplierID -> Query suppliers (ID, Name)
+   * UtilityID -> Query utilities (ID, Name)
+   * CustomerID -> Query accounts (ID, CustomerName)
+   * Mils
+   * AnnualMWHs
+   * TypeID
+   * StartMonth
+   * EndMonth
+   * StartYear
+   * EndYear
+   * Renewal
+   * RenewalStatusID
+   * NoofAccts
+   * Close
+   * RepID -> Query reps(ID, Fist, Last)
+   * Gas_Usage
+   * Gas_Commission
+   */
 
 }

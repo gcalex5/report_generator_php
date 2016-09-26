@@ -8,5 +8,20 @@
  */
 class employee
 {
+  /**
+   * 'reps' table
+   * ID
+   * First
+   * Last
+   * Title
+   * Primary
+   * Cell
+   * Fax
+   * Email
+   * Abbr
+   * Password
+   * Phone
+   * Title - Agent/Rep
+   */
 
 }
