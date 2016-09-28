@@ -1,0 +1,18 @@
+<div class="dates">
+    {% block dateselection %}
+        <h2>Select The Date Boundaries</h2>
+        <script>var dateArray = JSON.parse('{{ dates|json_encode|raw }}'); datePopulate(dateArray)</script>
+        <div class="dateSelect">
+            <div class="dateStart">
+                <h3>Start Date</h3>
+                <select id="dateSM"></select>
+                <select id="dateSY"></select>
+            </div>
+            <div class="dateEnd">
+                <h3>End Date</h3>
+                <select id="dateEM"></select>
+                <select id="dateEY"></select>
+            </div>
+        </div>
+    {% endblock %}
+</div>

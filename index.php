@@ -49,7 +49,7 @@ if(isset($conn)){
    * If we have either not loaded the reps list or we need a fresh copy
    * Query the data and render the template otherwise carry on
    */
-  //TODO: List may not be getting redrawn here, investigate further to see if this is needed
+  //TODO: Evaluate this, not sure if it is needed or improves performance
   if(!isset($_POST['loaded']['reps']) || $_POST['loaded']['reps'] == false){
     $reps = query_reps($conn);
     $_POST['loaded']['reps'] = true;
@@ -58,7 +58,19 @@ if(isset($conn)){
       echo $template->render(array('reps' => $reps));
     }
   }
-  //Min/Max date fields
+
+  /**
+   * If we have either not loaded the min/max years or we need a fresh copy
+   * Query the data and render the template otherwise carry on
+   */
+  //TODO: Evaluate this, not sure if it is needed or improves performance
+  if(!isset($_POST['loaded']['dates']) || $_POST['loaded']['dates'] == false){
+    $dates = query_date_ranges($conn);
+    $_POST['loaded']['dates'] = true;
+    if(isset($template)){
+      echo $template->render(array('dates' => $dates));
+    }
+  }
 }
 
 /**

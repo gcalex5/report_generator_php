@@ -34,10 +34,22 @@ body{
 }
 
 .reps{
+    margin-top: 10px;
+}
 
+.reps h2{
+    margin: 3px 0;
 }
 
 .rep-list{
     height: 200px;
     overflow-y: scroll;
+}
+
+.dates{
+    margin-top: 10px;
+}
+
+.dates h2, .dates h3{
+    margin: 3px 0;
 }

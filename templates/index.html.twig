@@ -19,8 +19,8 @@ which needs to be moved to its own file
                 <button id="natural_gas" type="button" onclick="reportCall('natural_gas')">Natural Gas Summary</button>
                 <button id="book" type="button" onclick="reportCall('book')">Book of Business Summary</button>
                 <button id="combo" type="button" onclick="reportCall('combo')">Combo Report</button>
-                {% embed "reps.html.twig" %}
-                {% endembed %}
+                {% embed "reps.html.twig" %}{% endembed %}
+                {% embed "dates.html.twig" %}{% endembed %}
             </form>
         </div>
     </div>

@@ -3,6 +3,7 @@ Handles the creation of the reps list and parses the list into JSON
 #}
 <div class="reps">
     {% block replist %}
+        <h2>Select Employees</h2>
         <div id="rep-list" class="rep-list">
             <script>var repList = JSON.parse('{{ reps|json_encode|raw }}');</script>
             {% for rep in reps %}
