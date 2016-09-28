@@ -10,17 +10,20 @@ Testing Comments and Twig functionality
 
 
 <div class="container">
-    <div class="reports">
-        <h1>Report Generator</h1>
-        <button id="electric" type="button" onclick="reportCall('electric')">Electricity Summary</button>
-        <button id="natural_gas" type="button" onclick="reportCall('natural_gas')">Natural Gas Summary</button>
-        <button id="book" type="button" onclick="reportCall('book')">Book of Business Summary</button>
-        <button id="combo" type="button" onclick="reportCall('combo')">Combo Report</button>
+    <div class="nav">
+        <div class="reports">
+            <h1>Report Generator</h1>
+            <button id="electric" type="button" onclick="reportCall('electric')">Electricity Summary</button>
+            <button id="natural_gas" type="button" onclick="reportCall('natural_gas')">Natural Gas Summary</button>
+            <button id="book" type="button" onclick="reportCall('book')">Book of Business Summary</button>
+            <button id="combo" type="button" onclick="reportCall('combo')">Combo Report</button>
+        </div>
+        <div class="reps">
+            {% include 'reps.html.twig' %}
+        </div>
     </div>
-    <div class="reps">
-        {% include 'reps.html.twig' %}
-    </div>
-    <div class="content">
 
+    <div class="content">
+        <h2>Report Content</h2>
     </div>
 </div>

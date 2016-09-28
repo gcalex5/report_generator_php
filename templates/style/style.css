@@ -1,3 +1,34 @@
-.test{
-    color: red;
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.container{
+    width: 100%;
+    height: 100%;
+}
+
+.nav{
+    width: 20%;
+    height: 100%;
+    float: left;
+}
+
+.reports{
+    display: inline-block;
+}
+
+.reports h1{
+    margin: 3px 0;
+}
+
+.reports button{
+    width: 100%;
+    clear: both;
+    margin: 3px 0;
+}
+
+.content h2{
+    margin: 3px 0;
+    text-align: center;
 }
