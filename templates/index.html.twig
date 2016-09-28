@@ -1,25 +1,27 @@
 {#
-Testing Comments and Twig functionality
+Main template handles the general page setup.
+Also currently handles the importing of dependencies
+which needs to be moved to its own file
 #}
 
-
-{# {{ source('style/style.css') }} #}
+{# TODO: Move these into a header Twig template #}
 <link href="templates/style/style.css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script src="templates/javascript/ajax-post.js"></script>
-
+<script src="templates/javascript/utilities.js"></script>
 
 <div class="container">
     <div class="nav">
         <div class="reports">
             <h1>Report Generator</h1>
-            <button id="electric" type="button" onclick="reportCall('electric')">Electricity Summary</button>
-            <button id="natural_gas" type="button" onclick="reportCall('natural_gas')">Natural Gas Summary</button>
-            <button id="book" type="button" onclick="reportCall('book')">Book of Business Summary</button>
-            <button id="combo" type="button" onclick="reportCall('combo')">Combo Report</button>
-        </div>
-        <div class="reps">
-            {% include 'reps.html.twig' %}
+            <form>
+                <button id="electric" type="button" onclick="reportCall('electric')">Electricity Summary</button>
+                <button id="natural_gas" type="button" onclick="reportCall('natural_gas')">Natural Gas Summary</button>
+                <button id="book" type="button" onclick="reportCall('book')">Book of Business Summary</button>
+                <button id="combo" type="button" onclick="reportCall('combo')">Combo Report</button>
+                {% embed "reps.html.twig" %}
+                {% endembed %}
+            </form>
         </div>
     </div>
 

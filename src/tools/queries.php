@@ -23,7 +23,12 @@ function init_database(){
 }
 
 function query_reps($conn){
-  $query = 'SELECT ID, First, Last, Title FROM reps';
-  $result = $conn->mysql_query($query);
-  return $result;
+  $query = 'SELECT ID, First, Last, Title FROM reps ORDER BY First';
+  $result = $conn->query($query);
+  $reps = array();
+  while($row = mysqli_fetch_array($result)){
+    $rep = new Employee($row);
+    $reps[] = $rep;
+  }
+  return $reps;
 }

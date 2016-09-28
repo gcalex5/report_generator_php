@@ -1,4 +1,6 @@
 /**
+ * Handles AJAX calls to generate reports
+ *
  * Created by alex on 9/26/16.
  */
 function reportCall(report){
@@ -6,7 +8,5 @@ function reportCall(report){
         type: "POST",
         url: "index.php",
         data: { report: report }
-    }).done(function(result){
-        
     });
 }

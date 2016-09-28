@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Created by PhpStorm.
  * User: alex
  * Date: 9/26/16
  * Time: 12:04 PM
  */
-class accounts
+class Account
 {
 
   /**
@@ -30,4 +29,7 @@ class accounts
    * Note
    */
 
+  public function __construct() {
+
+  }
 }

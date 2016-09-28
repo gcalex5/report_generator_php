@@ -32,3 +32,12 @@ body{
     margin: 3px 0;
     text-align: center;
 }
+
+.reps{
+
+}
+
+.rep-list{
+    height: 200px;
+    overflow-y: scroll;
+}
