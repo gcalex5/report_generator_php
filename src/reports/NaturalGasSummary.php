@@ -5,7 +5,14 @@
  * Date: 9/26/16
  * Time: 12:08 PM
  */
-class NaturalGasSummary
-{
 
+/**
+ * Class NaturalGasSummary
+ */
+class NaturalGasSummary{
+  /**
+   * NaturalGasSummary constructor.
+   */
+  public function __construct(){
+  }
 }

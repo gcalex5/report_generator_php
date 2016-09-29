@@ -31,6 +31,9 @@ class Contract
    * Gas_Commission
    */
 
+  /**
+   * Contract constructor.
+   */
   public function __construct() {
 
   }

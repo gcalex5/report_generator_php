@@ -3,6 +3,7 @@
  * Currently
  * 1: rep_select -> checks requested boxes on the options menu
  * 2: rep_deselect -> deselects all checkboxes when called
+ * 3: date
  *
  * Created by alex on 9/28/16.
  */
@@ -52,7 +53,7 @@ function rep_deselect(){
  *
  * @param dateArray -> [0]Start Months [1]Start Years [2]End Months [3]End Years
  */
-function datePopulate(dateArray){
+function date_populate(dateArray){
     for(var x=0; x<dateArray.length; x++){
         for(var y=0; y<dateArray[x].length; y++){
             var val = '<option value="' + dateArray[x][y] + '">' + dateArray[x][y] + '</option>';

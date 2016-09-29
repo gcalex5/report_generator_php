@@ -5,7 +5,15 @@
  * Date: 9/26/16
  * Time: 12:09 PM
  */
-class MonthlyCommission
-{
+
+/**
+ * Class MonthlyCommission
+ */
+class MonthlyCommission{
+  /**
+   * MonthlyCommission constructor.
+   */
+  public function __construct(){
+  }
 
 }

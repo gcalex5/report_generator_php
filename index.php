@@ -47,28 +47,49 @@ if(!isset($twig)){
 if(isset($conn)){
   /**
    * If we have either not loaded the reps list or we need a fresh copy
-   * Query the data and render the template otherwise carry on
+   * Query the data and flip the render check
    */
-  //TODO: Evaluate this, not sure if it is needed or improves performance
+  $render_check = false;
   if(!isset($_POST['loaded']['reps']) || $_POST['loaded']['reps'] == false){
     $reps = query_reps($conn);
     $_POST['loaded']['reps'] = true;
 
+    //TODO: what if the template isn't set?
     if(isset($template)){
-      echo $template->render(array('reps' => $reps));
+      $render_check = true;
     }
   }
 
   /**
    * If we have either not loaded the min/max years or we need a fresh copy
-   * Query the data and render the template otherwise carry on
+   * Query the data and flip the render check
    */
-  //TODO: Evaluate this, not sure if it is needed or improves performance
   if(!isset($_POST['loaded']['dates']) || $_POST['loaded']['dates'] == false){
     $dates = query_date_ranges($conn);
     $_POST['loaded']['dates'] = true;
+
+    //TODO: what if the template isn't set?
     if(isset($template)){
+      $render_check = true;
+    }
+  }
+
+  //TODO: figure out a better way to handle rendering this
+  if($render_check == true && isset($template)){
+    if(!isset($reps) && isset($dates)){
       echo $template->render(array('dates' => $dates));
+      $render_check = false;
+    }
+    elseif(isset($reps) && !isset($dates)){
+      echo $template->render(array('reps' => $reps));
+      $render_check = false;
+    }
+    elseif(isset($reps) && isset($dates)){
+      echo $template->render(array('reps' => $reps, 'dates' => $dates));
+      $render_check = false;
+    }
+    else{
+      //TODO: handle if neither are set and we end up here somehow
     }
   }
 }
@@ -79,6 +100,7 @@ if(isset($conn)){
 //TODO: Ensure we reset the $_POST['report'] variable to account for input without wanting a report
 if(isset($conn) && (isset($_POST['report']) && !empty($_POST['report']))) {
   //Call to the specific report constructors
+
   //TODO: Send date barriers and rep list to report constructors
   if($_POST['report'] == 'electric'){
     $report = new ElectricitySummary();
@@ -95,5 +117,8 @@ if(isset($conn) && (isset($_POST['report']) && !empty($_POST['report']))) {
   else if($_POST['report'] == 'book'){
     $report = new BookOfBusiness();
   }
-  
+
+  else{
+    //TODO: handle an improper render request
+  }
 }

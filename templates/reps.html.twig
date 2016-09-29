@@ -1,20 +1,23 @@
 {#
-Handles the creation of the reps list and parses the list into JSON
+  Handles the creation of the reps list and parses the list into JSON
 #}
 <div class="reps">
-    {% block replist %}
-        <h2>Select Employees</h2>
-        <div id="rep-list" class="rep-list">
-            <script>var repList = JSON.parse('{{ reps|json_encode|raw }}');</script>
-            {% for rep in reps %}
-                <input type="checkbox" name="employee" data-emp-type="{{ rep.getTitle() }}"
-                       value="{{ rep.getID() }}">{{ rep.getFirst() }} {{ rep.getLast }}</input><br>
-            {% endfor %}
-        </div>
-        <div class="rep-list-selectors">
-            <input id="select-all" type="button" value="Select All" onclick="rep_select('all')">
-            <input id="select-all-reps" type="button" value="Select All Reps" onclick="rep_select('Rep')">
-            <input id="select-all-agents" type="button" value="Select All Agents" onclick="rep_select('Agent')">
-        </div>
-    {% endblock %}
+  {% block replist %}
+    <h2>Select Employees</h2>
+    <div id="rep-list" class="rep-list">
+      <script>var repList = JSON.parse('{{ reps|json_encode|raw }}');</script>
+      {% for rep in reps %}
+        <input type="checkbox" name="employee" data-emp-type="{{ rep.getTitle() }}"
+           value="{{ rep.getID() }}">{{ rep.getFirst() }} {{ rep.getLast }}</input><br>
+      {% endfor %}
+    </div>
+    <div class="rep-list-selectors">
+      <input id="select-all" type="button" value="Select All"
+         onclick="rep_select('all')">
+      <input id="select-all-reps" type="button" value="Select All Reps"
+         onclick="rep_select('Rep')">
+      <input id="select-all-agents" type="button" value="Select All Agents"
+         onclick="rep_select('Agent')">
+    </div>
+  {% endblock %}
 </div>

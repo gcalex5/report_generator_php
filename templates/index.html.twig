@@ -1,7 +1,7 @@
 {#
-Main template handles the general page setup.
-Also currently handles the importing of dependencies
-which needs to be moved to its own file
+  Main template handles the general page setup.
+  Also currently handles the importing of dependencies
+  which needs to be moved to its own file
 #}
 
 {# TODO: Move these into a header Twig template #}
@@ -11,21 +11,24 @@ which needs to be moved to its own file
 <script src="templates/javascript/utilities.js"></script>
 
 <div class="container">
-    <div class="nav">
-        <div class="reports">
-            <h1>Report Generator</h1>
-            <form>
-                <button id="electric" type="button" onclick="reportCall('electric')">Electricity Summary</button>
-                <button id="natural_gas" type="button" onclick="reportCall('natural_gas')">Natural Gas Summary</button>
-                <button id="book" type="button" onclick="reportCall('book')">Book of Business Summary</button>
-                <button id="combo" type="button" onclick="reportCall('combo')">Combo Report</button>
-                {% embed "reps.html.twig" %}{% endembed %}
-                {% embed "dates.html.twig" %}{% endembed %}
-            </form>
-        </div>
+  <div class="nav">
+    <div class="reports">
+      <h1>Report Generator</h1>
+      <form>
+        <button id="electric" type="button"
+          onclick="reportCall('electric')">Electricity Summary</button>
+        <button id="natural_gas" type="button"
+          onclick="reportCall('natural_gas')">Natural Gas Summary</button>
+        <button id="book" type="button"
+          onclick="reportCall('book')">Book of Business Summary</button>
+        <button id="combo" type="button"
+          onclick="reportCall('combo')">Combo Report</button>
+        {% embed "reps.html.twig" %}{% endembed %}
+        {% embed "dates.html.twig" %}{% endembed %}
+      </form>
     </div>
-
-    <div class="content">
-        <h2>Report Content</h2>
-    </div>
+  </div>
+  <div class="content">
+    <h2>Report Content</h2>
+  </div>
 </div>

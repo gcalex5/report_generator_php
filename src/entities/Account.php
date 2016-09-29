@@ -29,6 +29,9 @@ class Account
    * Note
    */
 
+  /**
+   * Account constructor.
+   */
   public function __construct() {
 
   }
