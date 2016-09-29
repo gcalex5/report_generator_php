@@ -67,3 +67,14 @@ function query_date_ranges($conn){
   $temp[] = mysqli_fetch_all($conn->query($queryEY));
   return $temp;
 }
+
+/**
+ * Run a generic query and return the result set
+ *
+ * @param $conn -> Passed in database connection
+ * @param $query -> passed in query string
+ * @return mysqli_result -> result set from query
+ */
+function run_query($conn, $query){
+  return $conn->query($query);
+}

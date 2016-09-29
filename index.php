@@ -15,6 +15,7 @@
 include 'src/tools/queries.php';
 include 'src/reports/ElectricitySummary.php';
 include 'src/entities/Employee.php';
+include 'src/entities/Contract.php';
 require_once 'lib/composer/vendor/twig/twig/lib/Twig/Autoloader.php';
 
 /**
@@ -77,6 +78,7 @@ if(isset($conn)){
   //TODO: figure out a better way to handle rendering this
   if($render_check == true && isset($template)){
     if(!isset($reps) && isset($dates)){
+      $template = $twig->loadTemplate('content.html.twig');
       echo $template->render(array('dates' => $dates));
       $render_check = false;
     }
@@ -102,8 +104,10 @@ if(isset($conn) && (isset($_POST['report']) && !empty($_POST['report']))) {
   //Call to the specific report constructors
 
   //TODO: Send date barriers and rep list to report constructors
-  if($_POST['report'] == 'electric'){
+  if($_POST['report'] == 'electric' && isset($template)){
     $report = new ElectricitySummary();
+    $output = $report->controller($conn);
+    echo $twig->render('content.html.twig', array('foo' => 'foo', 'contracts'  => $output));
   }
 
   else if($_POST['report'] == 'natural_gas'){

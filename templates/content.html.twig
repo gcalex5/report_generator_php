@@ -1,0 +1,8 @@
+{% block content %}
+  <h2>Report Content</h2>
+  {% embed "topcontent.html.twig" %}{% endembed %}
+  <div id="temp">
+    {{ dump(contracts) }}
+    {{ dump(foo) }}
+  </div>
+{% endblock %}
