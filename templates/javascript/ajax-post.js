@@ -23,10 +23,11 @@ function reportCall(report){
   $.ajax({
     type: "POST",
     url: "index.php",
+    //url: "/Controller/ReportController.php",
     data: { report: report, dateSM: dateSM, dateSY: dateSY, dateEM: dateEM,
-      dateEY: dateEY, empIDS: empIDS  },
+      dateEY: dateEY, empIDS: empIDS, partial: 'partial'  },
     success: function(response) {
-    $('#temp').html(response);
+      $('#content').html(response);
     }
   });
 }
