@@ -14,6 +14,7 @@ class ElectricitySummary{
   protected $dateEM;
   protected $dateEY;
   protected $empArray = array();
+  protected $contracts = array();
 
   /**
    * ElectricitySummary constructor.
@@ -85,6 +86,7 @@ class ElectricitySummary{
    * @param $conn -> Passed in mysqli connection
    * @return array -> return array of contract objects
    */
+  //TODO: Exclude Gas Contracts
   protected function gatherAccountData($conn){
     $x = 0;
     $contracts = array();
@@ -117,6 +119,7 @@ class ElectricitySummary{
    *
    * @param $contracts -> Passed in array of contracts we are working with
    */
+  //TODO: Add a 'total' employee
   protected function calculateTotals($contracts){
     foreach($contracts as $contract){
       //Grab the Employee and set it to rep
@@ -133,19 +136,23 @@ class ElectricitySummary{
           if($contract->getRenewalStatusID() == 8){
             $rep->setFeeRenewed($rep->getFeeRenewed() +
               ($contract->getAnnualMWHs() * $contract->getMils()));
+            $rep->setMwhRenewed($rep->getMwhRenewed() + $contract->getAnnualMWHs());
           }
           elseif($contract->getRenewalStatusID() == 9
             || $contract->getRenewalStatusID() == 11){
             $rep->setFeeWorking($rep->getFeeWorking() +
               ($contract->getAnnualMWHs() + $contract->getMils()));
+            $rep->setMwhWorking($rep->getMwhWorking() + $contract->getAnnualMWHs());
           }
           elseif($contract->getRenewalStatusID() == 1){
             $rep->setFeeBack($rep->getFeeBack() +
               ($contract->getAnnualMWHs() + $contract->getMils()));
+            $rep->setMwhBack($rep->getMwhBack() + $contract->getAnnualMWHs());
           }
           else{
             $rep->setFeeLost($rep->getFeeLost() +
               ($contract->getAnnualMWHs() + $contract->getMils()));
+            $rep->setMwhLost($rep->getMwhLost() + $contract->getAnnualMWHs());
           }
         }
         //Set the rep back into the employee array

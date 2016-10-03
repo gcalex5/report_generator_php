@@ -1,3 +1,169 @@
 {% block topcontent %}
-  <h3>Report Content Top</h3>
+  {% if output %}
+    <div class="mwhTotal">
+      <table>
+        <thead><tr>
+          <th></th>
+          {% for emp in output  %}
+            <th>{{ emp.last }}</th>
+          {% endfor %}
+          <th></th>
+        </tr></thead>
+        <tbody>
+        {% for x in 0..4 %}
+          <tr>
+            {% if x == 0 %}
+              <td><b>Renewed</b></td>
+            {% elseif x == 1 %}
+              <td><b>Working</b></td>
+            {% elseif x == 2 %}
+              <td><b>Back</b></td>
+            {% elseif x == 3 %}
+              <td><b>Lost</b></td>
+            {% else %}
+              <td><b>Total</b></td>
+            {% endif %}
+            {% for emp in output %}
+              {% if x == 0 %}
+                <td>{{ emp.mwhRenewed|number_format(0, '.', ',') }}</td>
+              {% elseif x == 1 %}
+                <td>{{ emp.mwhWorking|number_format(0, '.', ',') }}</td>
+              {% elseif x == 2 %}
+                <td>{{ emp.mwhBack|number_format(0, '.', ',') }}</td>
+              {% elseif x == 3 %}
+                <td>{{ emp.mwhLost|number_format(0, '.', ',') }}</td>
+              {% else %}
+                <td>{{ emp.mwhTotal|number_format(0, '.', ',') }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="mwhTotalPercent">
+      <table>
+        <thead><tr>
+          <th></th>
+          {% for emp in output  %}
+            <th>{{ emp.last }}</th>
+          {% endfor %}
+          <th></th>
+        </tr></thead>
+        <tbody>
+        {% for x in 0..4 %}
+          <tr>
+            {% if x == 0 %}
+              <td><b>Renewed</b></td>
+            {% elseif x == 1 %}
+              <td><b>Working</b></td>
+            {% elseif x == 2 %}
+              <td><b>Back</b></td>
+            {% elseif x == 3 %}
+              <td><b>Lost</b></td>
+            {% else %}
+              <td><b>Total</b></td>
+            {% endif %}
+            {% for emp in output %}
+              {% if x == 0 %}
+                <td>{{ ((emp.mwhRenewed / emp.mwhTotal) * 100)|number_format(2, '.', ',') }}%</td>
+              {% elseif x == 1 %}
+                <td>{{ ((emp.mwhWorking / emp.mwhTotal) * 100)|number_format(2, '.', ',') }}%</td>
+              {% elseif x == 2 %}
+                <td>{{ ((emp.mwhBack / emp.mwhTotal) * 100)|number_format(2, '.', ',') }}%</td>
+              {% elseif x == 3 %}
+                <td>{{ ((emp.mwhLost / emp.mwhTotal) * 100)|number_format(2, '.', ',') }}%</td>
+              {% else %}
+                <td>{{ ((emp.mwhTotal / emp.mwhTotal) * 100)|number_format(2, '.', ',') }}%</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="feeTotal">
+      <table>
+        <thead><tr>
+          <th></th>
+          {% for emp in output  %}
+            <th>{{ emp.last }}</th>
+          {% endfor %}
+          <th></th>
+        </tr></thead>
+        <tbody>
+        {% for x in 0..4 %}
+          <tr>
+            {% if x == 0 %}
+              <td><b>Renewed</b></td>
+            {% elseif x == 1 %}
+              <td><b>Working</b></td>
+            {% elseif x == 2 %}
+              <td><b>Back</b></td>
+            {% elseif x == 3 %}
+              <td><b>Lost</b></td>
+            {% else %}
+              <td><b>Total</b></td>
+            {% endif %}
+            {% for emp in output %}
+              {% if x == 0 %}
+                <td>${{ emp.feeRenewed|number_format(2, '.', ',') }}</td>
+              {% elseif x == 1 %}
+                <td>${{ emp.feeWorking|number_format(2, '.', ',') }}</td>
+              {% elseif x == 2 %}
+                <td>${{ emp.feeBack|number_format(2, '.', ',') }}</td>
+              {% elseif x == 3 %}
+                <td>${{ emp.feeLost|number_format(2, '.', ',') }}</td>
+              {% else %}
+                <td>${{ emp.feeTotal|number_format(2, '.', ',') }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="mwhTotalPercent">
+      <table>
+        <thead><tr>
+          <th></th>
+          {% for emp in output  %}
+            <th>{{ emp.last }}</th>
+          {% endfor %}
+          <th></th>
+        </tr></thead>
+        <tbody>
+        {% for x in 0..4 %}
+          <tr>
+            {% if x == 0 %}
+              <td><b>Renewed</b></td>
+            {% elseif x == 1 %}
+              <td><b>Working</b></td>
+            {% elseif x == 2 %}
+              <td><b>Back</b></td>
+            {% elseif x == 3 %}
+              <td><b>Lost</b></td>
+            {% else %}
+              <td><b>Total</b></td>
+            {% endif %}
+            {% for emp in output %}
+              {% if x == 0 %}
+                <td>{{ ((emp.feeRenewed / emp.feeTotal) * 100)|number_format(2, '.', ',') }}%</td>
+              {% elseif x == 1 %}
+                <td>{{ ((emp.feeWorking / emp.feeTotal) * 100)|number_format(2, '.', ',') }}%</td>
+              {% elseif x == 2 %}
+                <td>{{ ((emp.feeBack / emp.feeTotal) * 100)|number_format(2, '.', ',') }}%</td>
+              {% elseif x == 3 %}
+                <td>{{ ((emp.feeLost / emp.feeTotal) * 100)|number_format(2, '.', ',') }}%</td>
+              {% else %}
+                <td>{{ ((emp.feeTotal / emp.feeTotal) * 100)|number_format(2, '.', ',') }}%</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
 {% endblock %}
