@@ -1,0 +1,35 @@
+{% block bottomcontent %}
+  {% if contract %}
+    <div class="bottom-table">
+      <table id="bottom-contract-table">
+        <thead><tr>
+          <th>Customer Name</th>
+          <th>Utility</th>
+          <th>Supplier</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Annual Usage</th>
+          <th>Commission</th>
+          <th>Annual Fee</th>
+          <th>Status</th>
+          <th>Rep</th>
+        </tr></thead>
+        <tbody>
+        {% for con in contract %}
+          <tr>
+            <td>{{ con.customerID }}</td>
+            <td>{{ con.utilityID }}</td>
+            <td>{{ con.supplierID }}</td>
+            <td>{{ con.startMonth }}-{{ con.startYear }}</td>
+            <td>{{ con.endMonth }}-{{ con.endYear }}</td>
+            <td>{{ con.annualMWHs }}</td>
+            <td>{{ con.mils }}</td>
+            <td>${{ con.annualMWHs * con.mils|number_format(2, '.', ',') }}</td>
+            <td>{{ con.repID }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% endblock %}

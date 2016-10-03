@@ -1,10 +1,10 @@
 {% block topcontent %}
-  {% if output %}
+  {% if employee %}
     <div class="mwhTotal">
       <table>
         <thead><tr>
           <th></th>
-          {% for emp in output  %}
+          {% for emp in employee %}
             <th>{{ emp.last }}</th>
           {% endfor %}
           <th></th>
@@ -23,7 +23,7 @@
             {% else %}
               <td><b>Total</b></td>
             {% endif %}
-            {% for emp in output %}
+            {% for emp in employee %}
               {% if x == 0 %}
                 <td>{{ emp.mwhRenewed|number_format(0, '.', ',') }}</td>
               {% elseif x == 1 %}
@@ -45,7 +45,7 @@
       <table>
         <thead><tr>
           <th></th>
-          {% for emp in output  %}
+          {% for emp in employee %}
             <th>{{ emp.last }}</th>
           {% endfor %}
           <th></th>
@@ -64,7 +64,7 @@
             {% else %}
               <td><b>Total</b></td>
             {% endif %}
-            {% for emp in output %}
+            {% for emp in employee %}
               {% if x == 0 %}
                 <td>{{ ((emp.mwhRenewed / emp.mwhTotal) * 100)|number_format(2, '.', ',') }}%</td>
               {% elseif x == 1 %}
@@ -87,7 +87,7 @@
       <table>
         <thead><tr>
           <th></th>
-          {% for emp in output  %}
+          {% for emp in employee %}
             <th>{{ emp.last }}</th>
           {% endfor %}
           <th></th>
@@ -106,7 +106,7 @@
             {% else %}
               <td><b>Total</b></td>
             {% endif %}
-            {% for emp in output %}
+            {% for emp in employee %}
               {% if x == 0 %}
                 <td>${{ emp.feeRenewed|number_format(2, '.', ',') }}</td>
               {% elseif x == 1 %}
@@ -128,7 +128,7 @@
       <table>
         <thead><tr>
           <th></th>
-          {% for emp in output  %}
+          {% for emp in employee %}
             <th>{{ emp.last }}</th>
           {% endfor %}
           <th></th>
@@ -147,7 +147,7 @@
             {% else %}
               <td><b>Total</b></td>
             {% endif %}
-            {% for emp in output %}
+            {% for emp in employee %}
               {% if x == 0 %}
                 <td>{{ ((emp.feeRenewed / emp.feeTotal) * 100)|number_format(2, '.', ',') }}%</td>
               {% elseif x == 1 %}

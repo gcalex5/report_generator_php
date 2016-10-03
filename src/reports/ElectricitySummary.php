@@ -40,15 +40,15 @@ class ElectricitySummary{
     $this->initEmps($conn);
 
     //Pull the contracts and initialize an array of them
-    $results = $this->gatherAccountData($conn);
+    $this->contracts = $this->gatherAccountData($conn);
 
     //Calculate the totals AnnualMWHs(% and mWh) AnnualTotals($ and %)
-    $this->calculateTotals($results);
+    $this->calculateTotals();
 
     //Clean up empty employees for output
     $this->empArrayCleanUp();
 
-    return $this->getEmpArray();
+    return [$this->getEmpArray(), $this->getContracts()];
   }
 
   /**
@@ -116,12 +116,10 @@ class ElectricitySummary{
    * Calculate the totals an set them to the Employee array
    * Percentages/Fee/mWh's
    * Totals: Overall total, Renewed, Working, Back, and Lost
-   *
-   * @param $contracts -> Passed in array of contracts we are working with
    */
   //TODO: Add a 'total' employee
-  protected function calculateTotals($contracts){
-    foreach($contracts as $contract){
+  protected function calculateTotals(){
+    foreach($this->getContracts() as $contract){
       //Grab the Employee and set it to rep
       $rep = $this->getEmpArray()[$contract->getRepID()];
       //Calculate the totals on the contract
@@ -237,5 +235,21 @@ class ElectricitySummary{
   public function setEmpArray($empArray)
   {
     $this->empArray = $empArray;
+  }
+
+  /**
+   * @return array
+   */
+  public function getContracts()
+  {
+    return $this->contracts;
+  }
+
+  /**
+   * @param array $contracts
+   */
+  public function setContracts($contracts)
+  {
+    $this->contracts = $contracts;
   }
 }

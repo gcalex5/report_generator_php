@@ -59,3 +59,8 @@ body{
 .dates h2, .dates h3{
     margin: 3px 0;
 }
+
+.bottom-table{
+    height: 300px;
+    overflow-y: scroll;
+}
