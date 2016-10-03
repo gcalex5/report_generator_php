@@ -48,6 +48,8 @@ class Contract implements JsonSerializable{
   protected $annualMWHs;
   protected $mils;
   protected $renewalStatusID;
+  protected $renewalStatus;
+  protected $repName;
 
   /**
    * Contract constructor.
@@ -86,6 +88,7 @@ class Contract implements JsonSerializable{
       'annualMWHs' => $this->getAnnualMWHs(),
       'mils' => $this->getMils(),
       'renewalStatusID' => $this->getRenewalStatusID(),
+      'renewalStatus' => $this->getRenewalStatusStatus(),
     ];
   }
 
@@ -279,5 +282,37 @@ class Contract implements JsonSerializable{
   public function setRenewalStatusID($renewalStatusID)
   {
     $this->renewalStatusID = $renewalStatusID;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getRenewalStatus()
+  {
+    return $this->renewalStatus;
+  }
+
+  /**
+   * @param mixed $renewalStatus
+   */
+  public function setRenewalStatus($renewalStatus)
+  {
+    $this->renewalStatus = $renewalStatus;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getRepName()
+  {
+    return $this->repName;
+  }
+
+  /**
+   * @param mixed $repName
+   */
+  public function setRepName($repName)
+  {
+    $this->repName = $repName;
   }
 }

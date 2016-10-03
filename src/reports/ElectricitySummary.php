@@ -1,6 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
+ * Provides the necessary functionality to
+ * generate an Electricity Renewal Report
+ *
  * User: alex
  * Date: 9/26/16
  * Time: 12:08 PM
@@ -37,7 +39,7 @@ class ElectricitySummary{
    */
   public function controller($conn){
     //Initialize an array of employees
-    $this->initEmps($conn);
+    $this->setEmpArray(init_report_employee($conn));
 
     //Pull the contracts and initialize an array of them
     $this->contracts = $this->gatherAccountData($conn);
@@ -48,36 +50,9 @@ class ElectricitySummary{
     //Clean up empty employees for output
     $this->empArrayCleanUp();
 
+    $this->contractArrayTransform();
+    //Return the necessary data to the front end
     return [$this->getEmpArray(), $this->getContracts()];
-  }
-
-  /**
-   * Initialize an array of Employees for the requested report
-   *
-   * @param $conn -> Passed in mysqli connection
-   */
-  protected function initEmps($conn){
-    $query = 'SELECT ID, First, Last, Title FROM reps WHERE (id=';
-    $x=0;
-    foreach ($_POST['empIDS'] as $id){
-      if($x== 0){
-        $query .= $id;
-      }
-      else{
-        $query .= " OR id=". $id . " ";
-      }
-      $x++;
-    }
-    $query .= ") ORDER BY First";
-    $result = run_query($conn, $query);
-    while($row = mysqli_fetch_array($result)){
-      $emp = new Employee($row);
-      $empArray[$emp->getId()] = $emp;
-    }
-
-    if(isset($empArray)){
-      $this->setEmpArray($empArray);
-    }
   }
 
   /**
@@ -163,7 +138,7 @@ class ElectricitySummary{
   }
 
   /**
-   *
+   * Cleanup the empty entries in the array
    */
   protected function empArrayCleanUp(){
     foreach($this->getEmpArray() as $rep){
@@ -171,6 +146,36 @@ class ElectricitySummary{
         unset($this->empArray[$rep->getId()]);
       }
     }
+  }
+
+  protected function contractArrayTransform(){
+    foreach($this->getContracts() as $contract){
+      //TODO: Set The Customer Name
+      //TODO: Set The Utility
+      //TODO: Set The Supplier
+      
+      //Renewal Status 8=Renewed 9&11=Working 1=Back Else=Lost
+      if($contract->getRenewalStatusID() == 8){
+        $contract->setRenewalStatus('Renewed');
+      }
+      elseif($contract->getRenewalStatusID() == 9 ||
+        $contract->getRenewalStatusID()==11){
+        $contract->setRenewalStatus('Working');
+      }
+      elseif($contract->getRenewalStatusID() == 1){
+        $contract->setRenewalStatus('Back-To-Utility');
+      }
+      else{
+        $contract->setRenewalStatus('Lost');
+      }
+
+      //Append the Last, First onto the contract object
+      $contract->setRepName($this->getEmpArray()[$contract->getRepID()]->getLast()
+        . ", " . $this->getEmpArray()[$contract->getRepID()]->getFirst());
+
+    }
+    
+    
   }
 
   /**

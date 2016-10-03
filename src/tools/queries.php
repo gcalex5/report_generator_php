@@ -78,3 +78,33 @@ function query_date_ranges($conn){
 function run_query($conn, $query){
   return $conn->query($query);
 }
+
+/**
+ *
+ * 
+ * @param $conn
+ * @return array
+ */
+function init_report_employee($conn){
+  $empArray = array();
+  if(isset($_POST['empIDS'])){
+    $query = 'SELECT ID, First, Last, Title FROM reps WHERE (id=';
+    $x=0;
+    foreach ($_POST['empIDS'] as $id){
+      if($x== 0){
+        $query .= $id;
+      }
+      else{
+        $query .= " OR id=". $id . " ";
+      }
+      $x++;
+    }
+    $query .= ") ORDER BY First";
+    $result = run_query($conn, $query);
+    while($row = mysqli_fetch_array($result)){
+      $emp = new Employee($row);
+      $empArray[$emp->getId()] = $emp;
+    }
+  }
+  return $empArray;
+}
