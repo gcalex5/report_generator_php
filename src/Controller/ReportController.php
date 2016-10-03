@@ -90,7 +90,7 @@ class ReportController{
     $report = new ElectricitySummary();
     $output = $report->controller($this->getConn());
     $this->setTemplate($this->getTwig()->loadTemplate('content.html.twig'));
-    echo $this->getTemplate()->render(array('foo' => 'foo', 'contracts'  => $output));
+    echo $this->getTemplate()->render(array('output'  => $output));
   }
 
   /**

@@ -13,6 +13,7 @@ class ElectricitySummary{
   protected $repID = array();
   protected $dateEM;
   protected $dateEY;
+  protected $empArray = array();
 
   /**
    * ElectricitySummary constructor.
@@ -34,13 +35,48 @@ class ElectricitySummary{
    * @return array
    */
   public function controller($conn){
-    //Array of Contracts
+    //Initialize an array of employees
+    $this->initEmps($conn);
+
+    //Pull the contracts and initialize an array of them
     $results = $this->gatherAccountData($conn);
 
     //Calculate the totals AnnualMWHs(% and mWh) AnnualTotals($ and %)
-    $calc_totals = $this->calculateTotals($results);
+    $this->calculateTotals($results);
 
-    return $results;
+    //Clean up empty employees for output
+    $this->empArrayCleanUp();
+
+    return $this->getEmpArray();
+  }
+
+  /**
+   * Initialize an array of Employees for the requested report
+   *
+   * @param $conn -> Passed in mysqli connection
+   */
+  protected function initEmps($conn){
+    $query = 'SELECT ID, First, Last, Title FROM reps WHERE (id=';
+    $x=0;
+    foreach ($_POST['empIDS'] as $id){
+      if($x== 0){
+        $query .= $id;
+      }
+      else{
+        $query .= " OR id=". $id . " ";
+      }
+      $x++;
+    }
+    $query .= ") ORDER BY First";
+    $result = run_query($conn, $query);
+    while($row = mysqli_fetch_array($result)){
+      $emp = new Employee($row);
+      $empArray[$emp->getId()] = $emp;
+    }
+
+    if(isset($empArray)){
+      $this->setEmpArray($empArray);
+    }
   }
 
   /**
@@ -55,7 +91,6 @@ class ElectricitySummary{
     $query = "SELECT * FROM contracts WHERE( AnnualMWHS > 0 AND EndMonth = "
       . $this->getDateEM() . " AND EndYear =" . $this->getDateEY() . ") AND ( ";
     foreach($this->getRepID() as $id){
-      $foo = $id;
       if($x == 0){
         $query.= "RepID = " . $id . " ";
       }
@@ -75,8 +110,62 @@ class ElectricitySummary{
     return $contracts;
   }
 
-  protected function calculateTotals(){
+  /**
+   * Calculate the totals an set them to the Employee array
+   * Percentages/Fee/mWh's
+   * Totals: Overall total, Renewed, Working, Back, and Lost
+   *
+   * @param $contracts -> Passed in array of contracts we are working with
+   */
+  protected function calculateTotals($contracts){
+    foreach($contracts as $contract){
+      //Grab the Employee and set it to rep
+      $rep = $this->getEmpArray()[$contract->getRepID()];
+      //Calculate the totals on the contract
+      if(isset($rep)){
+        $rep->setMwhTotal($rep->getMwhTotal() + $contract->getAnnualMwhs());
+        $rep->setFeeTotal($rep->getFeeTotal() +
+          ($contract->getAnnualMWHs() * $contract->getMils()));
 
+        //Set and append appropriate totals
+        //Total Fee = Fee + (Mils * Annual mWh's)
+        if(isset($contract)){
+          if($contract->getRenewalStatusID() == 8){
+            $rep->setFeeRenewed($rep->getFeeRenewed() +
+              ($contract->getAnnualMWHs() * $contract->getMils()));
+          }
+          elseif($contract->getRenewalStatusID() == 9
+            || $contract->getRenewalStatusID() == 11){
+            $rep->setFeeWorking($rep->getFeeWorking() +
+              ($contract->getAnnualMWHs() + $contract->getMils()));
+          }
+          elseif($contract->getRenewalStatusID() == 1){
+            $rep->setFeeBack($rep->getFeeBack() +
+              ($contract->getAnnualMWHs() + $contract->getMils()));
+          }
+          else{
+            $rep->setFeeLost($rep->getFeeLost() +
+              ($contract->getAnnualMWHs() + $contract->getMils()));
+          }
+        }
+        //Set the rep back into the employee array
+        $this->getEmpArray()[$contract->getRepID()] = $rep;
+      }
+      else{
+        //TODO: Do something here, handle non-existent rep id's
+      }
+    }
+  }
+
+  /**
+   *
+   */
+  protected function empArrayCleanUp(){
+    foreach($this->getEmpArray() as $rep){
+      if($rep->getMwhTotal() == 0 && $rep->getFeeTotal() == 0){
+        unset($this->empArray[$rep->getId()]);
+      }
+    }
   }
 
   /**
@@ -125,5 +214,21 @@ class ElectricitySummary{
   public function setDateEY($dateEY)
   {
     $this->dateEY = $dateEY;
+  }
+
+  /**
+   * @return array
+   */
+  public function getEmpArray()
+  {
+    return $this->empArray;
+  }
+
+  /**
+   * @param array $empArray
+   */
+  public function setEmpArray($empArray)
+  {
+    $this->empArray = $empArray;
   }
 }
