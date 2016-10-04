@@ -22,9 +22,16 @@
             <td>{{ con.supplierID }}</td>
             <td>{{ con.startMonth }}-{{ con.startYear }}</td>
             <td>{{ con.endMonth }}-{{ con.endYear }}</td>
-            <td>{{ con.annualMWHs }}</td>
-            <td>{{ con.mils }}</td>
-            <td>${{ con.annualMWHs * con.mils|number_format(2, '.', ',') }}</td>
+            {% if type == 'electric' %}
+              <td>{{ con.annualMWHs }}</td>
+              <td>{{ con.mils }}</td>
+              <td>${{ con.annualMWHs * con.mils|number_format(2, '.', ',') }}</td>
+            {% endif %}
+            {% if type == 'gas' %}
+              <td>{{ con.gasUsage }}</td>
+              <td>{{ con.gasCommission }}</td>
+              <td>${{ con.gasUsage * con.gasCommission|number_format(2, '.', ',') }}</td>
+            {% endif %}
             <td>{{ con.renewalStatus }}</td>
             <td>{{ con.repName }}</td>
           </tr>

@@ -1,7 +1,7 @@
 <?php
 /**
  * Provides the necessary functionality to
- * generate an Electricity Renewal Report
+ * generate an Renewal Report
  *
  * User: alex
  * Date: 9/26/16
@@ -9,9 +9,9 @@
  */
 
 /**
- * Class ElectricitySummary
+ * Class RenewalSummary
  */
-class ElectricitySummary{
+class RenewalSummary{
   protected $repID = array();
   protected $dateEM;
   protected $dateEY;
@@ -19,7 +19,7 @@ class ElectricitySummary{
   protected $contracts = array();
 
   /**
-   * ElectricitySummary constructor.
+   * RenewalSummary constructor.
    *
    * Construct the initial object and populate the variables necessary
    * to generate an Electricity Renewal Report
@@ -37,18 +37,24 @@ class ElectricitySummary{
    * @param $conn
    * @return array
    */
-  public function controller($conn){
+  public function controller($conn, $type){
     //Initialize an array of employees
     $this->setEmpArray(init_report_employee($conn));
 
-    //Pull the contracts and initialize an array of them
-    $this->contracts = $this->gatherAccountData($conn);
 
-    //Calculate the totals AnnualMWHs(% and mWh) AnnualTotals($ and %)
-    $this->calculateTotals();
+    //Pull the contracts and initialize an array of them
+    $this->contracts = $this->gatherAccountData($conn, $type);
+
+    if($type == 'electric'){
+      //Calculate the totals AnnualMWHs(% and mWh) AnnualTotals($ and %)
+      $this->calculateTotalsE();
+    }
+    else{
+      $this->calculateTotalsG();
+    }
 
     //Clean up empty employees for output
-    $this->empArrayCleanUp();
+    $this->empArrayCleanUp($type);
 
     $this->contractArrayTransform();
     //Return the necessary data to the front end
@@ -62,11 +68,20 @@ class ElectricitySummary{
    * @return array -> return array of contract objects
    */
   //TODO: Exclude Gas Contracts
-  protected function gatherAccountData($conn){
+  protected function gatherAccountData($conn, $type){
     $x = 0;
     $contracts = array();
-    $query = "SELECT * FROM contracts WHERE( AnnualMWHS > 0 AND EndMonth = "
-      . $this->getDateEM() . " AND EndYear =" . $this->getDateEY() . ") AND ( ";
+    //Electric Query
+    if($type == 'electric'){
+      $query = "SELECT * FROM contracts WHERE( AnnualMWHS > 0 AND EndMonth = "
+        . $this->getDateEM() . " AND EndYear =" . $this->getDateEY() . ") AND ( ";
+    }
+    //Natural Gas Query
+    else{
+      $query = "SELECT * FROM contracts WHERE( Gas_Usage > 0 AND EndMonth = "
+        . $this->getDateEM() . " AND EndYear =" . $this->getDateEY() . ") AND ( ";
+    }
+
     foreach($this->getRepID() as $id){
       if($x == 0){
         $query.= "RepID = " . $id . " ";
@@ -93,7 +108,7 @@ class ElectricitySummary{
    * Totals: Overall total, Renewed, Working, Back, and Lost
    */
   //TODO: Add a 'total' employee
-  protected function calculateTotals(){
+  protected function calculateTotalsE(){
     foreach($this->getContracts() as $contract){
       //Grab the Employee and set it to rep
       $rep = $this->getEmpArray()[$contract->getRepID()];
@@ -138,12 +153,69 @@ class ElectricitySummary{
   }
 
   /**
-   * Cleanup the empty entries in the array
+   *
    */
-  protected function empArrayCleanUp(){
+  //TODO: Add a 'total' employee
+  protected function calculateTotalsG(){
+    foreach($this->getContracts() as $contract){
+      //Grab the Employee and set it to rep
+      $rep = $this->getEmpArray()[$contract->getRepID()];
+      //Calculate the totals on the contract
+      if(isset($rep)){
+        $rep->setGasTotal($rep->getGasTotal() + $contract->getGasUsage());
+        $rep->setGasFeeTotal($rep->getGasFeeTotal() +
+          ($contract->getGasUsage() * $contract->getGasCommission()));
+
+        //Set and append appropriate totals
+        //Total Fee = Fee + (Commission * Annual Usage)
+        if(isset($contract)){
+          if($contract->getRenewalStatusID() == 8){
+            $rep->setGasFeeRenewed($rep->getFeeRenewed() +
+              ($contract->getGasUsage() * $contract->getGasCommission()));
+            $rep->setGasRenewed($rep->getGasRenewed() + $contract->getGasUsage());
+          }
+          elseif($contract->getRenewalStatusID() == 9
+            || $contract->getRenewalStatusID() == 11){
+            $rep->setGasFeeWorking($rep->getFeeWorking() +
+              ($contract->getGasUsage() + $contract->getGasCommission()));
+            $rep->setGasWorking($rep->getGasWorking() + $contract->getGasUsage());
+          }
+          elseif($contract->getRenewalStatusID() == 1){
+            $rep->setGasFeeBack($rep->getFeeBack() +
+              ($contract->getGasUsage() + $contract->getGasCommission()));
+            $rep->setGasBack($rep->getGasBack() + $contract->getGasUsage());
+          }
+          else{
+            $rep->setGasFeeLost($rep->getFeeLost() +
+              ($contract->getGasUsage() + $contract->getGasCommission()));
+            $rep->setGasLost($rep->getGasLost() + $contract->getGasUsage());
+          }
+        }
+        //Set the rep back into the employee array
+        $this->getEmpArray()[$contract->getRepID()] = $rep;
+      }
+      else{
+        //TODO: Do something here, handle non-existent rep id's
+      }
+    }
+  }
+
+  /**
+   * Cleanup the empty entries in the array
+   *
+   * @param $type -> Passed in flag denoting electric or gas
+   */
+  protected function empArrayCleanUp($type){
     foreach($this->getEmpArray() as $rep){
-      if($rep->getMwhTotal() == 0 && $rep->getFeeTotal() == 0){
-        unset($this->empArray[$rep->getId()]);
+      if($type == 'electric'){
+        if($rep->getMwhTotal() == 0 && $rep->getFeeTotal() == 0){
+          unset($this->empArray[$rep->getId()]);
+        }
+      }
+      else{
+       if($rep->getGasTotal() == 0 && $rep->getGasFeeTotal() == 0){
+         unset($this->empArray[$rep->getId()]);
+       }
       }
     }
   }
@@ -170,9 +242,13 @@ class ElectricitySummary{
       }
 
       //Append the Last, First onto the contract object
-      $contract->setRepName($this->getEmpArray()[$contract->getRepID()]->getLast()
-        . ", " . $this->getEmpArray()[$contract->getRepID()]->getFirst());
-
+      if(isset($this->getEmpArray()[$contract->getRepID()])){
+        $contract->setRepName($this->getEmpArray()[$contract->getRepID()]->getLast()
+          . ", " . $this->getEmpArray()[$contract->getRepID()]->getFirst());
+      }
+      else{
+        $contract->setRepName('Unknown, Unknown');
+      }
     }
     
     

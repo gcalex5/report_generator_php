@@ -8,7 +8,7 @@
 
 /**
 include 'src/tools/queries.php';
-include 'src/reports/ElectricitySummary.php';
+include 'src/reports/RenewalSummary.php';
 include 'src/entities/Employee.php';
 include 'src/entities/Contract.php';
 require_once 'lib/composer/vendor/twig/twig/lib/Twig/Autoloader.php';
@@ -80,6 +80,9 @@ class ReportController{
       if($_POST['report'] == 'electric') {
         $this->electric();
       }
+      if($_POST['report'] == 'gas'){
+        $this->gas();
+      }
     }
   }
 
@@ -87,10 +90,17 @@ class ReportController{
    *
    */
   public function electric(){
-    $report = new ElectricitySummary();
-    $output = $report->controller($this->getConn());
+    $report = new RenewalSummary();
+    $output = $report->controller($this->getConn(), 'electric');
     $this->setTemplate($this->getTwig()->loadTemplate('content.html.twig'));
-    echo $this->getTemplate()->render(array('employee'  => $output[0], 'contract' => $output[1]));
+    echo $this->getTemplate()->render(array('employee'  => $output[0], 'contract' => $output[1], 'type' => 'electric'));
+  }
+
+  public function gas(){
+    $report = new RenewalSummary();
+    $output = $report->controller($this->getConn(), 'gas');
+    $this->setTemplate($this->getTwig()->loadTemplate('content.html.twig'));
+    echo $this->getTemplate()->render(array('employee'  => $output[0], 'contract' => $output[1], 'type' => 'gas'));
   }
 
   /**

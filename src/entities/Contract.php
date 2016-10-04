@@ -47,6 +47,8 @@ class Contract implements JsonSerializable{
   protected $endYear;
   protected $annualMWHs;
   protected $mils;
+  protected $gasUsage;
+  protected $gasCommission;
   protected $renewalStatusID;
   protected $renewalStatus;
   protected $repName;
@@ -67,6 +69,8 @@ class Contract implements JsonSerializable{
     $this->endYear = $dbData['EndYear'];
     $this->annualMWHs = $dbData['AnnualMWHs'];
     $this->mils = $dbData['Mils'];
+    $this->gasUsage = $dbData['Gas_Usage'];
+    $this->gasCommission = $dbData['Gas_Commission'];
     $this->renewalStatusID = $dbData['RenewalStatusID'];
   }
 
@@ -87,8 +91,10 @@ class Contract implements JsonSerializable{
       'endYear' => $this->getEndYear(),
       'annualMWHs' => $this->getAnnualMWHs(),
       'mils' => $this->getMils(),
+      'gasUsage' => $this->getGasUsage(),
+      'gasCommission' => $this->getGasCommission(),
       'renewalStatusID' => $this->getRenewalStatusID(),
-      'renewalStatus' => $this->getRenewalStatusStatus(),
+      'renewalStatus' => $this->getRenewalStatus(),
     ];
   }
 
@@ -314,5 +320,37 @@ class Contract implements JsonSerializable{
   public function setRepName($repName)
   {
     $this->repName = $repName;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getGasUsage()
+  {
+    return $this->gasUsage;
+  }
+
+  /**
+   * @param mixed $gasUsage
+   */
+  public function setGasUsage($gasUsage)
+  {
+    $this->gasUsage = $gasUsage;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getGasCommission()
+  {
+    return $this->gasCommission;
+  }
+
+  /**
+   * @param mixed $gasCommission
+   */
+  public function setGasCommission($gasCommission)
+  {
+    $this->gasCommission = $gasCommission;
   }
 }

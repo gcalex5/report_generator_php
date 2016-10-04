@@ -8,7 +8,7 @@
  */
 
 include 'src/tools/queries.php';
-include 'src/reports/ElectricitySummary.php';
+include 'src/reports/RenewalSummary.php';
 include 'src/entities/Employee.php';
 include 'src/entities/Contract.php';
 include 'src/Controller/ReportController.php';

@@ -7,27 +7,12 @@
  */
 class Employee implements JsonSerializable
 {
-  /**
-   * 'reps' table
-   * ID
-   * First
-   * Last
-   * Title
-   * Primary
-   * Cell
-   * Fax
-   * Email
-   * Abbr
-   * Password
-   * Phone
-   * Title - Agent/Rep
-   */
-
-  //TODO: potentially pull and populate additional fields
   protected $id;
   protected $first;
   protected $last;
   protected $title;
+
+  /** Electricity Variables **/
   protected $mwhRenewed;
   protected $mwhWorking;
   protected $mwhBack;
@@ -39,6 +24,18 @@ class Employee implements JsonSerializable
   protected $feeLost;
   protected $feeTotal;
 
+  /** Gas Variables **/
+  protected $gasRenewed;
+  protected $gasWorking;
+  protected $gasBack;
+  protected $gasLost;
+  protected $gasTotal;
+  protected $gasFeeRenewed;
+  protected $gasFeeWorking;
+  protected $gasFeeBack;
+  protected $gasFeeLost;
+  protected $gasFeeTotal;
+
   /**
    * Employee constructor.
    * @param $dbData -> Passed in database result set
@@ -48,6 +45,8 @@ class Employee implements JsonSerializable
     $this->first = $dbData['First'];
     $this->last = $dbData['Last'];
     $this->title = $dbData['Title'];
+    
+    /** Electricity Variables **/
     $this->mwhRenewed = 0;
     $this->mwhWorking = 0;
     $this->mwhBack = 0;
@@ -58,6 +57,18 @@ class Employee implements JsonSerializable
     $this->feeBack = 0;
     $this->feeLost = 0;
     $this->feeTotal = 0;
+    
+    /** Gas Variables **/
+    $this->gasRenewed = 0;
+    $this->gasWorking = 0;
+    $this->gasBack = 0;
+    $this->gasLost = 0;
+    $this->gasTotal = 0;
+    $this->gasFeeRenewed = 0;
+    $this->gasFeeWorking = 0;
+    $this->gasFeeBack = 0;
+    $this->gasFeeLost = 0;
+    $this->gasFeeTotal = 0;
   }
 
   /**
@@ -70,6 +81,8 @@ class Employee implements JsonSerializable
       'first' => $this->getFirst(),
       'last' => $this->getLast(),
       'title' => $this->getTitle(),
+
+      /** Electricity Variables **/
       'mwhRenewed' => $this->getMwhRenewed(),
       'mwhWorking' => $this->getMwhWorking(),
       'mwhBack' => $this->getMwhBack(),
@@ -79,7 +92,19 @@ class Employee implements JsonSerializable
       'feeWorking' => $this->getFeeWorking(),
       'feeBack' => $this->getFeeBack(),
       'feeLost' => $this->getFeeLost(),
-      'feeTotal' => $this->getFeeTotal()
+      'feeTotal' => $this->getFeeTotal(),
+
+      /** Gas Variables **/
+      'gasRenewed' => $this->getGasRenewed(),
+      'gasWorking' => $this->getGasWorking(),
+      'gasBack' => $this->getGasBack(),
+      'gasLost' => $this->getGasLost(),
+      'gasTotal' => $this->getGasTotal(),
+      'gasFeeRenewed' => $this->getGasFeeRenewed(),
+      'gasFeeWorking' => $this->getGasFeeWorking(),
+      'gasFeeBack' => $this->getGasFeeBack(),
+      'gasFeeLost' => $this->getGasFeeLost(),
+      'gasFeeTotal' => $this->getGasFeeTotal()
     ];
   }
 
@@ -306,5 +331,165 @@ class Employee implements JsonSerializable
   public function setFeeLost($feeLost)
   {
     $this->feeLost = $feeLost;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getGasRenewed()
+  {
+    return $this->gasRenewed;
+  }
+
+  /**
+   * @param mixed $gasRenewed
+   */
+  public function setGasRenewed($gasRenewed)
+  {
+    $this->gasRenewed = $gasRenewed;
+  }
+
+  /**
+   * @return int
+   */
+  public function getGasWorking()
+  {
+    return $this->gasWorking;
+  }
+
+  /**
+   * @param int $gasWorking
+   */
+  public function setGasWorking($gasWorking)
+  {
+    $this->gasWorking = $gasWorking;
+  }
+
+  /**
+   * @return int
+   */
+  public function getGasBack()
+  {
+    return $this->gasBack;
+  }
+
+  /**
+   * @param int $gasBack
+   */
+  public function setGasBack($gasBack)
+  {
+    $this->gasBack = $gasBack;
+  }
+
+  /**
+   * @return int
+   */
+  public function getGasLost()
+  {
+    return $this->gasLost;
+  }
+
+  /**
+   * @param int $gasLost
+   */
+  public function setGasLost($gasLost)
+  {
+    $this->gasLost = $gasLost;
+  }
+
+  /**
+   * @return int
+   */
+  public function getGasTotal()
+  {
+    return $this->gasTotal;
+  }
+
+  /**
+   * @param int $gasTotal
+   */
+  public function setGasTotal($gasTotal)
+  {
+    $this->gasTotal = $gasTotal;
+  }
+
+  /**
+   * @return int
+   */
+  public function getGasFeeRenewed()
+  {
+    return $this->gasFeeRenewed;
+  }
+
+  /**
+   * @param int $gasFeeRenewed
+   */
+  public function setGasFeeRenewed($gasFeeRenewed)
+  {
+    $this->gasFeeRenewed = $gasFeeRenewed;
+  }
+
+  /**
+   * @return int
+   */
+  public function getGasFeeWorking()
+  {
+    return $this->gasFeeWorking;
+  }
+
+  /**
+   * @param int $gasFeeWorking
+   */
+  public function setGasFeeWorking($gasFeeWorking)
+  {
+    $this->gasFeeWorking = $gasFeeWorking;
+  }
+
+  /**
+   * @return int
+   */
+  public function getGasFeeBack()
+  {
+    return $this->gasFeeBack;
+  }
+
+  /**
+   * @param int $gasFeeBack
+   */
+  public function setGasFeeBack($gasFeeBack)
+  {
+    $this->gasFeeBack = $gasFeeBack;
+  }
+
+  /**
+   * @return int
+   */
+  public function getGasFeeLost()
+  {
+    return $this->gasFeeLost;
+  }
+
+  /**
+   * @param int $gasFeeLost
+   */
+  public function setGasFeeLost($gasFeeLost)
+  {
+    $this->gasFeeLost = $gasFeeLost;
+  }
+
+  /**
+   * @return int
+   */
+  public function getGasFeeTotal()
+  {
+    return $this->gasFeeTotal;
+  }
+
+  /**
+   * @param int $gasFeeTotal
+   */
+  public function setGasFeeTotal($gasFeeTotal)
+  {
+    $this->gasFeeTotal = $gasFeeTotal;
   }
 }
