@@ -67,7 +67,6 @@ class RenewalSummary{
    * @param $conn -> Passed in mysqli connection
    * @return array -> return array of contract objects
    */
-  //TODO: Exclude Gas Contracts
   protected function gatherAccountData($conn, $type){
     $x = 0;
     $contracts = array();

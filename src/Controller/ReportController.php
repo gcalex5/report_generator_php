@@ -7,14 +7,6 @@
  */
 
 /**
-include 'src/tools/queries.php';
-include 'src/reports/RenewalSummary.php';
-include 'src/entities/Employee.php';
-include 'src/entities/Contract.php';
-require_once 'lib/composer/vendor/twig/twig/lib/Twig/Autoloader.php';
-**/
-
-/**
  * Class ReportController
  */
 class ReportController{
@@ -83,6 +75,9 @@ class ReportController{
       if($_POST['report'] == 'gas'){
         $this->gas();
       }
+      if($_POST['report'] == 'book'){
+        $this->book();
+      }
     }
   }
 
@@ -101,6 +96,13 @@ class ReportController{
     $output = $report->controller($this->getConn(), 'gas');
     $this->setTemplate($this->getTwig()->loadTemplate('content.html.twig'));
     echo $this->getTemplate()->render(array('employee'  => $output[0], 'contract' => $output[1], 'type' => 'gas'));
+  }
+
+  public function book(){
+    $report = new BookOfBusiness();
+    $output = $report->controller($this->getConn());
+    $this->setTemplate($this->getTwig()->loadTemplate('content.html.twig'));
+    echo $this->getTemplate()->render(array('book_emp'  => $output[0]));
   }
 
   /**

@@ -14,27 +14,27 @@
  * @param type -> passed in from 'reps.html.twig' tells us which boxes to check
  */
 function rep_select(type){
-    if(type == "all"){
-        $('#rep-list').find(':checkbox').each(function () {
-            jQuery(this).attr('checked', true);
-        });
+  if(type == "all"){
+    $('#rep-list').find(':checkbox').each(function () {
+      jQuery(this).attr('checked', true);
+    });
+  }
+  else{
+    rep_deselect();
+    if(type == "Rep"){
+      $('#rep-list').find(':checkbox').each(function () {
+        $('input[data-emp-type="Rep"]').attr('checked', true);
+      });
     }
-    else{
-        rep_deselect();
-        if(type == "Rep"){
-            $('#rep-list').find(':checkbox').each(function () {
-                $('input[data-emp-type="Rep"]').attr('checked', true);
-            });
-        }
-        else if(type == "Agent"){
-            $('#rep-list').find(':checkbox').each(function () {
-                $('input[data-emp-type="Agent"]').attr('checked', true);
-            });
-        }
-        else {
-            //TODO: Put some code here or get rid of it
-        }
+    else if(type == "Agent"){
+      $('#rep-list').find(':checkbox').each(function () {
+        $('input[data-emp-type="Agent"]').attr('checked', true);
+      });
     }
+    else {
+      //TODO: Put some code here or get rid of it
+    }
+  }
 }
 
 /**
@@ -43,9 +43,9 @@ function rep_select(type){
  * Called if 'Rep' or 'Agent' Select All's are requested
  */
 function rep_deselect(){
-    $('#rep-list').find(':checkbox').each(function () {
-        jQuery(this).attr('checked', false);
-    });
+  $('#rep-list').find(':checkbox').each(function () {
+    jQuery(this).attr('checked', false);
+  });
 }
 
 /**
@@ -54,21 +54,27 @@ function rep_deselect(){
  * @param dateArray -> [0]Start Months [1]Start Years [2]End Months [3]End Years
  */
 function date_populate(dateArray){
-    for(var x=0; x<dateArray.length; x++){
-        for(var y=0; y<dateArray[x].length; y++){
-            var val = '<option value="' + dateArray[x][y] + '">' + dateArray[x][y] + '</option>';
-            if(x == 0){
-                $("#dateSM").append(val);
-            }
-            else if(x == 1){
-                $("#dateSY").append(val);
-            }
-            else if(x == 2){
-                $("#dateEM").append(val);
-            }
-            else if(x == 3){
-                $("#dateEY").append(val);
-            }
-        }
+  for(var x=0; x<dateArray.length; x++){
+    for(var y=0; y<dateArray[x].length; y++){
+      var val = '<option value="' + dateArray[x][y] + '">' + dateArray[x][y] + '</option>';
+      if(x == 0){
+        $("#dateSM").append(val);
+      }
+      else if(x == 1){
+        $("#dateSY").append(val);
+      }
+      else if(x == 2){
+        $("#dateEM").append(val);
+      }
+      else if(x == 3){
+        $("#dateEY").append(val);
+      }
     }
+  }
+}
+
+function generate_tabs(){
+  $( function() {
+    $( "#book-content-top" ).tabs();
+  });
 }

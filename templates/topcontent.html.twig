@@ -228,4 +228,45 @@
       </table>
     </div>
   {% endif %}
+
+  {% if book_emp %}
+    <div id="book-content-top">
+      <ul>
+        {% for key,val in book_emp %}
+          <li><a href="#tabs-{{ key }}">REP: {{ key }}</a></li>
+        {% endfor %}
+      </ul>
+      {% for key,val in book_emp %}
+        <table id="tabs-{{ key }}">
+          <thead><tr>
+            <th>Customer</th>
+            <th>Utility</th>
+            <th>Contract Start</th>
+            <th>Contract End</th>
+            <th>Annual mWh</th>
+            <th>Annual mcf</th>
+            <th>Annual Fee[E]</th>
+            <th>Annual Fee[G]</th>
+            <th>Monthly Fee</th>
+          </tr></thead>
+          <tbody>
+          {% for con in val  %}
+            <tr>
+              <td>{{ con.id }}</td>
+              <td>{{ con.utilityID }}</td>
+              <td>{{ con.startMonth }}-{{ con.startYear }}</td>
+              <td>{{ con.endMonth }}-{{ con.endYear }}</td>
+              <td>{{ con.annualMWHs|number_format(0, ',') }}</td>
+              <td>{{ con.gasUsage|number_format(0, ',') }}</td>
+              <td>${{ (con.annualMWHs * con.mils)|number_format(2, '.', ',') }}</td>
+              <td>${{ (con.gasUsage * con.gasCommission)|number_format(2, '.', ',') }}</td>
+              <td>FOO</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      {% endfor %}
+    </div>
+    <script>generate_tabs();</script>
+  {% endif %}
 {% endblock %}

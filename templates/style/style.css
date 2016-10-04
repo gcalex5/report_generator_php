@@ -64,3 +64,17 @@ body{
     height: 300px;
     overflow-y: scroll;
 }
+
+#book-content-top{
+    width: 80%;
+    margin: auto;
+}
+
+#book-content-top>table{
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+table{
+    text-align: center;
+}
