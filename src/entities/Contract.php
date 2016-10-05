@@ -10,37 +10,14 @@
  * Class Contract
  */
 class Contract implements JsonSerializable{
-  /**
-   * 'contracts' table
-   * ID
-   *
-   * RepID -> Query reps(ID, Fist, Last)
-   *
-   * SupplierID -> Query suppliers (ID, Name)
-   * UtilityID -> Query utilities (ID, Name)
-   * CustomerID -> Query accounts (ID, CustomerName)
-   *
-   * StartMonth
-   * StartYear
-   *
-   * EndMonth
-   * EndYear
-   *
-   * AnnualMWHs
-   * Mils
-   *
-   * Renewal
-   * RenewalStatusID
-   * Gas_Usage
-   * Gas_Commission
-   *
-   * Electric Fee = Mils * AnnualMWHs
-   */
   protected $id;
   protected $repID;
   protected $supplierID;
+  protected $supplierName;
   protected $utilityID;
+  protected $utilityName;
   protected $customerID;
+  protected $customerName;
   protected $startMonth;
   protected $startYear;
   protected $endMonth;
@@ -61,8 +38,11 @@ class Contract implements JsonSerializable{
     $this->id = $dbData['ID'];
     $this->repID = $dbData['RepID'];
     $this->supplierID = $dbData['SupplierID'];
+    $this->supplierName = $dbData['SupplierName'];
     $this->utilityID = $dbData['UtilityID'];
+    $this->utilityName = $dbData['UtilityName'];
     $this->customerID = $dbData['CustomerID'];
+    $this->customerName = $dbData['CustomerName'];
     $this->startMonth = $dbData['StartMonth'];
     $this->startYear = $dbData['StartYear'];
     $this->endMonth = $dbData['EndMonth'];
@@ -72,19 +52,23 @@ class Contract implements JsonSerializable{
     $this->gasUsage = $dbData['Gas_Usage'];
     $this->gasCommission = $dbData['Gas_Commission'];
     $this->renewalStatusID = $dbData['RenewalStatusID'];
+    $this->repName = $dbData['RepLast'];
   }
 
   /**
-   * Implementation of JSON Serialize
-   * @return array -> returns array allowing access to protected variables
+   * Implementation of jsonSerialize
+   * @return array -> return array allowing access to protected variables
    */
   public function jsonSerialize(){
     return [
       'id' => $this->getId(),
       'repID' => $this->getRepID(),
       'supplierID' => $this->getSupplierID(),
+      'supplierName' => $this->getSupplierName(),
       'utilityID' => $this->getUtilityID(),
+      'utilityName' => $this->getUtilityName(),
       'customerID' => $this->getCustomerID(),
+      'customerName' => $this->getCustomerName(),
       'startMonth' => $this->getStartMonth(),
       'startYear' => $this->getStartYear(),
       'endMonth' => $this->getEndMonth(),
@@ -95,6 +79,7 @@ class Contract implements JsonSerializable{
       'gasCommission' => $this->getGasCommission(),
       'renewalStatusID' => $this->getRenewalStatusID(),
       'renewalStatus' => $this->getRenewalStatus(),
+      'repName' => $this->getRepName()
     ];
   }
 
@@ -352,5 +337,53 @@ class Contract implements JsonSerializable{
   public function setGasCommission($gasCommission)
   {
     $this->gasCommission = $gasCommission;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getUtilityName()
+  {
+    return $this->utilityName;
+  }
+
+  /**
+   * @param mixed $utilityName
+   */
+  public function setUtilityName($utilityName)
+  {
+    $this->utilityName = $utilityName;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getCustomerName()
+  {
+    return $this->customerName;
+  }
+
+  /**
+   * @param mixed $customerName
+   */
+  public function setCustomerName($customerName)
+  {
+    $this->customerName = $customerName;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getSupplierName()
+  {
+    return $this->supplierName;
+  }
+
+  /**
+   * @param mixed $supplierName
+   */
+  public function setSupplierName($supplierName)
+  {
+    $this->supplierName = $supplierName;
   }
 }

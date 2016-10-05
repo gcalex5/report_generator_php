@@ -31,9 +31,6 @@ function rep_select(type){
         $('input[data-emp-type="Agent"]').attr('checked', true);
       });
     }
-    else {
-      //TODO: Put some code here or get rid of it
-    }
   }
 }
 

@@ -17,9 +17,9 @@
         <tbody>
         {% for con in contract %}
           <tr>
-            <td>{{ con.customerID }}</td>
-            <td>{{ con.utilityID }}</td>
-            <td>{{ con.supplierID }}</td>
+            <td>{{ con.customerName }}</td>
+            <td>{{ con.utilityName }}</td>
+            <td>{{ con.supplierName }}</td>
             <td>{{ con.startMonth }}-{{ con.startYear }}</td>
             <td>{{ con.endMonth }}-{{ con.endYear }}</td>
             {% if type == 'electric' %}

@@ -233,13 +233,13 @@
     <div id="book-content-top">
       <ul>
         {% for key,val in book_emp %}
-          <li><a href="#tabs-{{ key }}">REP: {{ key }}</a></li>
+          <li><a href="#tabs-{{ val[0].repName }}">{{ val[0].repName }}</a></li>
         {% endfor %}
       </ul>
       {% for key,val in book_emp %}
-        <div id="tabs-{{ key }}">
+        <div id="tabs-{{ val[0].repName }}">
           <div class="book-top-table">
-            <table id="{{ key }}">
+            <table id="{{ val[0].repName }}">
               <thead><tr>
                 <th>Customer</th>
                 <th>Utility</th>
@@ -249,20 +249,18 @@
                 <th>Annual mcf</th>
                 <th>Annual Fee[E]</th>
                 <th>Annual Fee[G]</th>
-                <th>Monthly Fee</th>
               </tr></thead>
               <tbody>
               {% for con in val  %}
                 <tr>
-                  <td>{{ con.id }}</td>
-                  <td>{{ con.utilityID }}</td>
+                  <td>{{ con.customerName }}</td>
+                  <td>{{ con.utilityname }}</td>
                   <td>{{ con.startMonth }}-{{ con.startYear }}</td>
                   <td>{{ con.endMonth }}-{{ con.endYear }}</td>
                   <td>{{ con.annualMWHs|number_format(0, ',') }}</td>
                   <td>{{ con.gasUsage|number_format(0, ',') }}</td>
                   <td>${{ (con.annualMWHs * con.mils)|number_format(2, '.', ',') }}</td>
                   <td>${{ (con.gasUsage * con.gasCommission)|number_format(2, '.', ',') }}</td>
-                  <td>FOO</td>
                 </tr>
               {% endfor %}
               </tbody>

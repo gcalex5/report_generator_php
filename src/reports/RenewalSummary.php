@@ -45,7 +45,6 @@ class RenewalSummary{
     //Initialize an array of employees
     $this->setEmpArray(init_report_employee($conn));
 
-
     //Pull the contracts and initialize an array of them
     $this->contracts = $this->gatherAccountData($conn, $type);
 
@@ -69,28 +68,43 @@ class RenewalSummary{
    * Gather the account data and parse it into an array of contract objects
    *
    * @param $conn -> Passed in mysqli connection
+   * @param $type -> Passed in conditional denoting which report we want
    * @return array -> return array of contract objects
    */
   protected function gatherAccountData($conn, $type){
     $x = 0;
     $contracts = array();
     //Electric Query
+    $query = "SELECT contracts.ID, contracts.RepID, contracts.SupplierID,"
+      . " contracts.UtilityID, contracts.CustomerID, contracts.StartMonth,"
+      . " contracts.StartYear, contracts.EndMonth, contracts.EndYear,"
+      . " contracts.AnnualMWHs, contracts.Mils, contracts.Gas_Usage,"
+      . " contracts.Gas_Commission, contracts.RenewalStatusID,"
+      . " utilities.Name as UtilityName, customers.Name as CustomerName,"
+      . " suppliers.Name as SupplierName FROM contracts"
+      . " INNER JOIN utilities ON utilities.ID = contracts.UtilityID"
+      . " INNER JOIN customers ON customers.ID = contracts.CustomerID"
+      . " INNER JOIN reps ON reps.ID = contracts.RepID"
+      . " INNER JOIN suppliers on suppliers.ID = contracts.SupplierID";
+    //Electric Query
     if($type == 'electric'){
-      $query = "SELECT * FROM contracts WHERE( AnnualMWHS > 0 AND EndMonth = "
-        . $this->getDateM() . " AND EndYear =" . $this->getDateY() . ") AND ( ";
+      $query .= " WHERE( AnnualMWHS > 0";
     }
     //Natural Gas Query
     else{
-      $query = "SELECT * FROM contracts WHERE( Gas_Usage > 0 AND EndMonth = "
-        . $this->getDateM() . " AND EndYear =" . $this->getDateY() . ") AND ( ";
+      $query .= " WHERE( Gas_Usage > 0";
     }
+    //Append on the date barriers
+    $query .= " AND EndMonth = " . $this->getDateM() . " AND EndYear ="
+      . $this->getDateY() . ") AND ( ";
 
+    //Add the conditionals for the representatives
     foreach($this->getRepID() as $id){
       if($x == 0){
-        $query.= "RepID = " . $id . " ";
+        $query.= "contracts.RepID = " . $id . " ";
       }
       else{
-        $query.= "OR RepID = " . $id . " ";
+        $query.= "OR contracts.RepID = " . $id . " ";
       }
       $x++;
     }
@@ -228,10 +242,6 @@ class RenewalSummary{
 
   protected function contractArrayTransform(){
     foreach($this->getContracts() as $contract){
-      //TODO: Set The Customer Name
-      //TODO: Set The Utility
-      //TODO: Set The Supplier
-      
       //Renewal Status 8=Renewed 9&11=Working 1=Back Else=Lost
       if($contract->getRenewalStatusID() == 8){
         $contract->setRenewalStatus('Renewed');

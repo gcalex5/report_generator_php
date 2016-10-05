@@ -30,10 +30,9 @@ class BookOfBusiness{
 
     $results = $this->gatherAccountData($conn);
 
-    $top = $this->generateOutput($results);
+    $output = $this->generateOutput($results);
 
-    //TODO: cleanup output first entry in array is always empty
-    return array($top[0], $top[1]);
+    return array($output[0], $output[1]);
   }
 
   /**
@@ -42,19 +41,43 @@ class BookOfBusiness{
    * @param $conn -> Passed in mysqli connection
    * @return array -> return array of contract objects
    */
+  //TODO: Migrate this over to 'queries.php'
+  //TODO: Ensure all date bounds are accounted for
   protected function gatherAccountData($conn){
-    $x = 0;
-    $contracts = array();
+    $x = 0; // counter
+    $contracts = array(); //Array that will hold the contract data
 
-    $query = "SELECT * FROM contracts WHERE( AnnualMWHS > 0 OR Gas_Usage > 0) AND (EndMonth = "
-      . $this->getDateM() . " AND EndYear =" . $this->getDateY() . ") AND ( ";
+    //Construct the query
+    $query = "SELECT contracts.ID, contracts.RepID, contracts.SupplierID,"
+      . " contracts.UtilityID, contracts.CustomerID, contracts.StartMonth,"
+      . " contracts.StartYear, contracts.EndMonth, contracts.EndYear,"
+      . " contracts.AnnualMWHs, contracts.Mils, contracts.Gas_Usage,"
+      . " contracts.Gas_Commission, contracts.RenewalStatusID,"
+      . " utilities.Name as UtilityName, customers.Name as CustomerName,"
+      . " suppliers.Name as SupplierName, reps.Last as RepLast"
+      . " FROM contracts"
+      . " INNER JOIN utilities ON utilities.ID = contracts.UtilityID"
+      . " INNER JOIN customers ON customers.ID = contracts.CustomerID"
+      . " INNER JOIN reps ON reps.ID = contracts.RepID"
+      . " INNER JOIN suppliers ON suppliers.ID = contracts.SupplierID"
+      . " WHERE( AnnualMWHS > 0 OR Gas_Usage > 0) "
+      . " AND ( EndMonth = " . $this->getDateM() . " AND EndYear =". $this->getDateY()
+      . " OR ( StartYear <= ". $this->getDateY() . " AND EndYear > " . $this->getDateY() . ")";
 
+    if($this->getDateM() != 12){
+      $query .= " OR ( StartYear<= " . $this->getDateY() . " AND EndMonth = " . ($this->getDateM() + 1)
+        . " AND EndYear = " . $this->getDateY() . ". )) AND (";
+    }
+    else{
+      $query .= " OR ( StartYear<= " . $this->getDateY() . " AND EndMonth = 1"
+        . " AND EndYear = " . ($this->getDateY() + 1) . " )) AND (";
+    }
     foreach($this->getRepID() as $id){
       if($x == 0){
-        $query.= "RepID = " . $id . " ";
+        $query.= "contracts.RepID = " . $id . " ";
       }
       else{
-        $query.= "OR RepID = " . $id . " ";
+        $query.= "OR contracts.RepID = " . $id . " ";
       }
       $x++;
     }
@@ -80,10 +103,9 @@ class BookOfBusiness{
 
       //If this employee does not have a record of the utility
       //Instantiate it and append the totals
-      if(!isset($outputBottom[$contract->getRepID()][$contract->getUtilityID()])){
+      if(!isset($outputBottom[$contract->getRepID()][$contract->getUtilityName()])){
         $util = new Utility();
-        //TODO: Switch to utility name
-        $util->setName($contract->getUtilityID());
+        $util->setName($contract->getUtilityName());
         //Electric
         $util->setMwh($contract->getAnnualMWHs());
         $util->setAnnualFeeE($contract->getAnnualMWHs() * $contract->getMils());
@@ -98,8 +120,7 @@ class BookOfBusiness{
       //If this employee does have a record of the utility
       //Append the totals
       else{
-        //TODO: Switch to utility name
-        $util = $outputBottom[$contract->getRepID()][$contract->getUtilityID()];
+        $util = $outputBottom[$contract->getRepID()][$contract->getUtilityName()];
         //Electric
         $util->setMwh($util->getMwh() + $contract->getAnnualMWHs());
         $util->setAnnualFeeE($util->getAnnualFeeE +
@@ -112,10 +133,18 @@ class BookOfBusiness{
         $util->setContracts($util->getContracts() + 1);
         $util->setTotalAnnualFee($util->getTotalAnnualFee() +
           ($util->getAnnualFeeE() + $util->getAnnualFeeG()));
-        $outputBottom[$contract->getRepID()][$contract->getUtilityID()] = $util;
+        $outputBottom[$contract->getRepID()][$contract->getUtilityName()] = $util;
       }
     }
     //TODO: Add a total entity for both top/bottom output
+
+    //Workaround for first entry of array always being a blank entry
+    if(sizeof($outputTop[0]) == 0){
+      unset($outputTop[0]);
+    }
+    if(sizeof($outputBottom[0] == 0)){
+      unset($outputBottom[0]);
+    }
     return [$outputTop, $outputBottom];
   }
 

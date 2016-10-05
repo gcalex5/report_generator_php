@@ -33,8 +33,8 @@ class Utility implements JsonSerializable{
   }
 
   /**
-   *
-   * @return array
+   * Implementation of jsonSerialize
+   * @return array -> return array allowing access to protected variables
    */
   public function jsonSerialize() {
     return [

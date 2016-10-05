@@ -70,8 +70,13 @@ body{
     margin: auto;
 }
 
-#book-content-top>table{
-    max-height: 400px;
+.book-top-table{
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.book-bottom-table{
+    max-height: 250px;
     overflow-y: scroll;
 }
 

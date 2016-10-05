@@ -26,7 +26,7 @@ class ReportController{
   }
 
   /**
-   *
+   * Initialize Twig and load up the index template
    */
   function init_twig(){
     Twig_Autoloader::register();
@@ -40,7 +40,7 @@ class ReportController{
   }
 
   /**
-   *
+   * Initialize the connection to the database
    */
   function init_db_connection(){
     //Database connection
@@ -53,19 +53,17 @@ class ReportController{
   }
 
   /**
-   *
+   * Initialize the menu
    */
   public function init_menu(){
     $reps = query_reps($this->getConn());
-    $_POST['loaded']['reps'] = true;
-
     $dates = query_date_ranges($this->getConn());
-    $_POST['loaded']['dates'] = true;
     echo $this->getTemplate()->render(array('reps' => $reps, 'dates' => $dates));
   }
 
   /**
-   *
+   * Accept the POST request and fire off the correct function to
+   * start the construction of a report
    */
   public function report_request(){
     if(isset($_POST['report']) && !empty($_POST['report'])) {
@@ -85,7 +83,7 @@ class ReportController{
   }
 
   /**
-   *
+   * Handles generating an Electric Renewal Report
    */
   public function electric(){
     $report = new RenewalSummary();
@@ -94,6 +92,9 @@ class ReportController{
     echo $this->getTemplate()->render(array('employee'  => $output[0], 'contract' => $output[1], 'type' => 'electric'));
   }
 
+  /**
+   * Handles generating an Natural Gas Renewal Report
+   */
   public function gas(){
     $report = new RenewalSummary();
     $output = $report->controller($this->getConn(), 'gas');
@@ -101,6 +102,9 @@ class ReportController{
     echo $this->getTemplate()->render(array('employee'  => $output[0], 'contract' => $output[1], 'type' => 'gas'));
   }
 
+  /**
+   * Handles generating an Book of Business report
+   */
   public function book(){
     $report = new BookOfBusiness();
     $output = $report->controller($this->getConn());
