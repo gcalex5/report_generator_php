@@ -32,7 +32,7 @@ class BookOfBusiness{
     $results = $this->gatherAccountData($conn);
 
     $top = $this->generateOutput($results);
-    return array($top, null);
+    return array($top[0], $top[1]);
   }
 
   /**
@@ -72,13 +72,51 @@ class BookOfBusiness{
     //TODO: Create a 2D Array Out[Rep][Array of Contracts]
     //TODO: Create an array of Utilities with Contract Totals/usage/fee/total fee
     $outputTop = array(array());
+    $outputBottom = array(array());
 
     //Loop contracts
     foreach($contracts as $contract){
       //Assign contract to a rep
       $outputTop[$contract->getRepID()][] = $contract;
+
+      //If this employee does not have a record of the utility
+      //Instantiate it and append the totals
+      if(!isset($outputBottom[$contract->getRepID()][$contract->getUtilityID()])){
+        $util = new Utility();
+        //TODO: Switch to utility name
+        $util->setName($contract->getUtilityID());
+        //Electric
+        $util->setMwh($contract->getAnnualMWHs());
+        $util->setAnnualFeeE($contract->getAnnualMWHs() * $contract->getMils());
+        //Gas
+        $util->setMcf($contract->getGasUsage());
+        $util->setAnnualFeeG($contract->getGasUsage() * $contract->getGasCommission());
+        //Total
+        $util->setContracts(1);
+        $util->setTotalAnnualFee($util->getAnnualFeeE() + $util->getAnnualFeeG());
+        $outputBottom[$contract->getRepID()][$contract->getUtilityID()] = $util;
+      }
+      //If this employee does have a record of the utility
+      //Append the totals
+      else{
+        //TODO: Switch to utility name
+        $util = $outputBottom[$contract->getRepID()][$contract->getUtilityID()];
+        //Electric
+        $util->setMwh($util->getMwh() + $contract->getAnnualMWHs());
+        $util->setAnnualFeeE($util->getAnnualFeeE +
+          ($contract->getAnnualMWHs() * $contract->getMils()));
+        //Gas
+        $util->setMcf($util->getMcf() + $contract->getGasUsage());
+        $util->setAnnualFeeG($util->getAnnualFeeG() +
+          ($contract->getGasUsage() * $contract->getGasCommission()));
+        //Total
+        $util->setContracts($util->getContracts() + 1);
+        $util->setTotalAnnualFee($util->getTotalAnnualFee() +
+          ($util->getAnnualFeeE() + $util->getAnnualFeeG()));
+        $outputBottom[$contract->getRepID()][$contract->getUtilityID()] = $util;
+      }
     }
-    return $outputTop;
+    return [$outputTop, $outputBottom];
   }
 
   /**

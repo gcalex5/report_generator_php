@@ -237,34 +237,66 @@
         {% endfor %}
       </ul>
       {% for key,val in book_emp %}
-        <table id="tabs-{{ key }}">
-          <thead><tr>
-            <th>Customer</th>
-            <th>Utility</th>
-            <th>Contract Start</th>
-            <th>Contract End</th>
-            <th>Annual mWh</th>
-            <th>Annual mcf</th>
-            <th>Annual Fee[E]</th>
-            <th>Annual Fee[G]</th>
-            <th>Monthly Fee</th>
-          </tr></thead>
-          <tbody>
-          {% for con in val  %}
-            <tr>
-              <td>{{ con.id }}</td>
-              <td>{{ con.utilityID }}</td>
-              <td>{{ con.startMonth }}-{{ con.startYear }}</td>
-              <td>{{ con.endMonth }}-{{ con.endYear }}</td>
-              <td>{{ con.annualMWHs|number_format(0, ',') }}</td>
-              <td>{{ con.gasUsage|number_format(0, ',') }}</td>
-              <td>${{ (con.annualMWHs * con.mils)|number_format(2, '.', ',') }}</td>
-              <td>${{ (con.gasUsage * con.gasCommission)|number_format(2, '.', ',') }}</td>
-              <td>FOO</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
+        <div id="tabs-{{ key }}">
+          <div class="book-top-table">
+            <table id="{{ key }}">
+              <thead><tr>
+                <th>Customer</th>
+                <th>Utility</th>
+                <th>Contract Start</th>
+                <th>Contract End</th>
+                <th>Annual mWh</th>
+                <th>Annual mcf</th>
+                <th>Annual Fee[E]</th>
+                <th>Annual Fee[G]</th>
+                <th>Monthly Fee</th>
+              </tr></thead>
+              <tbody>
+              {% for con in val  %}
+                <tr>
+                  <td>{{ con.id }}</td>
+                  <td>{{ con.utilityID }}</td>
+                  <td>{{ con.startMonth }}-{{ con.startYear }}</td>
+                  <td>{{ con.endMonth }}-{{ con.endYear }}</td>
+                  <td>{{ con.annualMWHs|number_format(0, ',') }}</td>
+                  <td>{{ con.gasUsage|number_format(0, ',') }}</td>
+                  <td>${{ (con.annualMWHs * con.mils)|number_format(2, '.', ',') }}</td>
+                  <td>${{ (con.gasUsage * con.gasCommission)|number_format(2, '.', ',') }}</td>
+                  <td>FOO</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% if book_emp_bottom %}
+            <div class="book-bottom-table">
+              <table>
+                <thead><tr>
+                  <th>Name</th>
+                  <th>Contracts</th>
+                  <th>mWh</th>
+                  <th>mcf</th>
+                  <th>Annual Fee[E]</th>
+                  <th>Annual fee[G]</th>
+                  <th>Total Annual Fee</th>
+                </tr></thead>
+                <tbody>
+                  {% for utility in book_emp_bottom[key]  %}
+                    <tr>
+                      <td>{{ utility.name }}</td>
+                      <td>{{ utility.contracts|number_format(0, '', ',') }}</td>
+                      <td>{{ utility.mwh|number_format(0, ',') }}</td>
+                      <td>{{ utility.mcf|number_format(0, ',') }}</td>
+                      <td>${{ utility.annualFeeE|number_format(2, '.', ',') }}</td>
+                      <td>${{ utility.annualFeeG|number_format(2, '.', ',') }}</td>
+                      <td>${{ utility.totalAnnualFee|number_format(2, '.', ',') }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% endif %}
+        </div>
       {% endfor %}
     </div>
     <script>generate_tabs();</script>

@@ -102,7 +102,7 @@ class ReportController{
     $report = new BookOfBusiness();
     $output = $report->controller($this->getConn());
     $this->setTemplate($this->getTwig()->loadTemplate('content.html.twig'));
-    echo $this->getTemplate()->render(array('book_emp'  => $output[0]));
+    echo $this->getTemplate()->render(array('book_emp'  => $output[0], 'book_emp_bottom' => $output[1]));
   }
 
   /**
