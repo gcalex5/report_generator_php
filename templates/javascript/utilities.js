@@ -44,7 +44,7 @@ function rep_select(type){
  */
 function rep_deselect(){
   $('#rep-list').find(':checkbox').each(function () {
-    jQuery(this).attr('checked', false);
+    $(this).attr('checked', false);
   });
 }
 
