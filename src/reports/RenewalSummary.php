@@ -13,8 +13,8 @@
  */
 class RenewalSummary{
   protected $repID = array();
-  protected $dateEM;
-  protected $dateEY;
+  protected $dateM;
+  protected $dateY;
   protected $empArray = array();
   protected $contracts = array();
 
@@ -27,15 +27,19 @@ class RenewalSummary{
    * Shows all active Contracts ending at the time sorted by Rep/Agent
    */
   public function __construct(){
-    //TODO: switch this to the correct date variable names
-    $this->repID = $_POST['empIDS'];
-    $this->dateEM = $_POST['dateEM'];
-    $this->dateEY = $_POST['dateEY'];
+    $this->setRepID($_POST['empIDS']);
+    $this->setDateM($_POST['dateM']);
+    $this->setDateY($_POST['dateY']);
   }
 
   /**
-   * @param $conn
-   * @return array
+   * Controller function for Renewal Reports
+   * Handles calling the necessary functions to generate
+   * the output of renewal reports
+   *
+   * @param $conn -> Passed in mysqli connection
+   * @param $type -> Passed in string denoting the type of report
+   * @return array -> Return an array containing the output Keys: [0]Employee data [1]Contract data
    */
   public function controller($conn, $type){
     //Initialize an array of employees
@@ -73,12 +77,12 @@ class RenewalSummary{
     //Electric Query
     if($type == 'electric'){
       $query = "SELECT * FROM contracts WHERE( AnnualMWHS > 0 AND EndMonth = "
-        . $this->getDateEM() . " AND EndYear =" . $this->getDateEY() . ") AND ( ";
+        . $this->getDateM() . " AND EndYear =" . $this->getDateY() . ") AND ( ";
     }
     //Natural Gas Query
     else{
       $query = "SELECT * FROM contracts WHERE( Gas_Usage > 0 AND EndMonth = "
-        . $this->getDateEM() . " AND EndYear =" . $this->getDateEY() . ") AND ( ";
+        . $this->getDateM() . " AND EndYear =" . $this->getDateY() . ") AND ( ";
     }
 
     foreach($this->getRepID() as $id){
@@ -102,11 +106,12 @@ class RenewalSummary{
   }
 
   /**
-   * Calculate the totals an set them to the Employee array
+   * Calculate the totals and set them to the Employee array
    * Percentages/Fee/mWh's
    * Totals: Overall total, Renewed, Working, Back, and Lost
    */
   //TODO: Add a 'total' employee
+  //TODO: Merge Electric/Gas into one function
   protected function calculateTotalsE(){
     foreach($this->getContracts() as $contract){
       //Grab the Employee and set it to rep
@@ -152,7 +157,9 @@ class RenewalSummary{
   }
 
   /**
-   *
+   * Calculate the totals and set them to the Employee array
+   * Percentages/Fee/Usage
+   * Totals: Overall total, Renewed, Working, Back, and Lost
    */
   //TODO: Add a 'total' employee
   protected function calculateTotalsG(){
@@ -272,33 +279,33 @@ class RenewalSummary{
   /**
    * @return mixed
    */
-  public function getDateEM()
+  public function getDateM()
   {
-    return $this->dateEM;
+    return $this->dateM;
   }
 
   /**
-   * @param mixed $dateEM
+   * @param mixed $dateM
    */
-  public function setDateEM($dateEM)
+  public function setDateM($dateM)
   {
-    $this->dateEM = $dateEM;
+    $this->dateM = $dateM;
   }
 
   /**
    * @return mixed
    */
-  public function getDateEY()
+  public function getDateY()
   {
-    return $this->dateEY;
+    return $this->dateY;
   }
 
   /**
-   * @param mixed $dateEY
+   * @param mixed $dateY
    */
-  public function setDateEY($dateEY)
+  public function setDateY($dateY)
   {
-    $this->dateEY = $dateEY;
+    $this->dateY = $dateY;
   }
 
   /**

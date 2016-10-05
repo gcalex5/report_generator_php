@@ -11,8 +11,8 @@
  */
 class BookOfBusiness{
   protected $repID = array();
-  protected $dateEM;
-  protected $dateEY;
+  protected $dateM;
+  protected $dateY;
   protected $empArray = array();
   protected $contracts = array();
 
@@ -20,10 +20,9 @@ class BookOfBusiness{
    * BookOfBusiness constructor.
    */
   public function __construct(){
-    //TODO: switch this to the correct date variable names
-    $this->repID = $_POST['empIDS'];
-    $this->dateEM = $_POST['dateEM'];
-    $this->dateEY = $_POST['dateEY'];
+    $this->setRepID($_POST['empIDS']);
+    $this->setDateM($_POST['dateM']);
+    $this->setDateY($_POST['dateY']);
   }
 
   public function controller($conn){
@@ -32,6 +31,8 @@ class BookOfBusiness{
     $results = $this->gatherAccountData($conn);
 
     $top = $this->generateOutput($results);
+
+    //TODO: cleanup output first entry in array is always empty
     return array($top[0], $top[1]);
   }
 
@@ -46,7 +47,7 @@ class BookOfBusiness{
     $contracts = array();
 
     $query = "SELECT * FROM contracts WHERE( AnnualMWHS > 0 OR Gas_Usage > 0) AND (EndMonth = "
-      . $this->getDateEM() . " AND EndYear =" . $this->getDateEY() . ") AND ( ";
+      . $this->getDateM() . " AND EndYear =" . $this->getDateY() . ") AND ( ";
 
     foreach($this->getRepID() as $id){
       if($x == 0){
@@ -69,8 +70,6 @@ class BookOfBusiness{
   }
 
   protected function generateOutput($contracts){
-    //TODO: Create a 2D Array Out[Rep][Array of Contracts]
-    //TODO: Create an array of Utilities with Contract Totals/usage/fee/total fee
     $outputTop = array(array());
     $outputBottom = array(array());
 
@@ -116,6 +115,7 @@ class BookOfBusiness{
         $outputBottom[$contract->getRepID()][$contract->getUtilityID()] = $util;
       }
     }
+    //TODO: Add a total entity for both top/bottom output
     return [$outputTop, $outputBottom];
   }
 
@@ -138,33 +138,33 @@ class BookOfBusiness{
   /**
    * @return mixed
    */
-  public function getDateEM()
+  public function getDateM()
   {
-    return $this->dateEM;
+    return $this->dateM;
   }
 
   /**
-   * @param mixed $dateEM
+   * @param mixed $dateM
    */
-  public function setDateEM($dateEM)
+  public function setDateM($dateM)
   {
-    $this->dateEM = $dateEM;
+    $this->dateM = $dateM;
   }
 
   /**
    * @return mixed
    */
-  public function getDateEY()
+  public function getDateY()
   {
-    return $this->dateEY;
+    return $this->dateY;
   }
 
   /**
-   * @param mixed $dateEY
+   * @param mixed $dateY
    */
-  public function setDateEY($dateEY)
+  public function setDateY($dateY)
   {
-    $this->dateEY = $dateEY;
+    $this->dateY = $dateY;
   }
 
   /**

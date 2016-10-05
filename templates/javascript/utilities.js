@@ -65,9 +65,11 @@ function date_populate(dateArray){
       }
       else if(x == 2){
         $("#dateEM").append(val);
+        $("#dateM").append(val);
       }
       else if(x == 3){
         $("#dateEY").append(val);
+        $("#dateY").append(val);
       }
     }
   }

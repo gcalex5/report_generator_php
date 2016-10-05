@@ -80,10 +80,14 @@ function run_query($conn, $query){
 }
 
 /**
+ * Handles the initialization of an array of employees
+ * Utilized in Renewal Reports and Book of Business Reports.
  *
+ * Current setup relies on $_POST['empIDS'] value being set, should
+ * do some error checking regarding that
  * 
- * @param $conn
- * @return array
+ * @param $conn -> Passed in mysqli connection
+ * @return array -> Return an array of Employee objects
  */
 function init_report_employee($conn){
   $empArray = array();
@@ -105,6 +109,9 @@ function init_report_employee($conn){
       $emp = new Employee($row);
       $empArray[$emp->getId()] = $emp;
     }
+  }
+  else{
+    //TODO: Do something if we don't have the proper $_POST data
   }
   return $empArray;
 }

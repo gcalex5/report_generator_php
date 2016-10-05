@@ -5,6 +5,8 @@
  */
 function reportCall(report){
   //TODO: Ensure all inputs are validated, otherwise return an error
+  var dateM = $( "#dateM" ).val();
+  var dateY = $( "#dateY" ).val();
   var dateSM = $( "#dateSM" ).val();
   var dateSY = $( "#dateSY" ).val();
   var dateEM = $( "#dateEM" ).val();
@@ -23,8 +25,7 @@ function reportCall(report){
   $.ajax({
     type: "POST",
     url: "index.php",
-    //url: "/Controller/ReportController.php",
-    data: { report: report, dateSM: dateSM, dateSY: dateSY, dateEM: dateEM,
+    data: { report: report, dateM: dateM, dateY: dateY, dateSM: dateSM, dateSY: dateSY, dateEM: dateEM,
       dateEY: dateEY, empIDS: empIDS, partial: 'partial'  },
     success: function(response) {
       $('#content').html(response);

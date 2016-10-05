@@ -78,6 +78,9 @@ class ReportController{
       if($_POST['report'] == 'book'){
         $this->book();
       }
+      if($_POST['report'] == 'commission'){
+        
+      }
     }
   }
 
