@@ -103,7 +103,7 @@ function init_report_employee($conn){
       }
       $x++;
     }
-    $query .= ") ORDER BY First";
+    $query .= ") ORDER BY Last, First";
     $result = run_query($conn, $query);
     while($row = mysqli_fetch_array($result)){
       $emp = new Employee($row);

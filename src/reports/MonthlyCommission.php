@@ -31,9 +31,17 @@ class MonthlyCommission{
   }
 
   public function controller($conn){
+
+    //Pulling in the employee data we will be working with
     $this->setEmpArray(init_report_employee($conn));
 
-    
+    //Query the contracts pertaining to the employees within the start/end bounds -> (sort by EndYear, EndMonth)
+
+    //Loop through the contracts calculating commission and appending an array to the employee
+    // -> output[Employee][Commission_Array] -> Commission_Array[Month-Year][CalculatedCommission]
+
+    //Return output to the front end
+    return 0;
   }
 
   /**
