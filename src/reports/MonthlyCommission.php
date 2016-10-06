@@ -110,7 +110,7 @@ class MonthlyCommission{
    * @param $contracts
    * @return array
    */
-  //TODO: Verify logic, in comparison to production it looks like contracts are cutting out sooner than it should.
+  //TODO: Verify logic, in comparison to production it looks like contracts are cutting out sooner than it should. Missing 3 month shift to Fee Start/End.
   //TODO: Profile code and look for optimizations, we are dangerously close to our 30sec limit, Java desktop app is 3 seconds max
   //TODO: Add total row to bottom of each entry
   protected function generateOutput($contracts){
@@ -136,38 +136,34 @@ class MonthlyCommission{
         }
         //Else the contract is valid and we should append the output data
         else{
-          //Create a commission object
-          $temp = new Commission();
-          $temp->setDate($start->format('Y-m'));
-          $temp->setRepID($contract->getRepId());
-          $temp->setCommission(0);
+          $date = $start->format('Y-m');
 
           //If we already have data for this date. ex; another contract active on this Y-m
-          if(isset($output[$contract->getRepName()][$temp->getDate()])){
+          if(isset($output[$contract->getRepName()][$date])){
 
             //If we are Electric
             if($contract->getAnnualMWHs() > 0){
-              $temp->setCommission(($contract->getAnnualMWHs() * $contract->getMils())/12);
+              $commission = ($contract->getAnnualMWHs() * $contract->getMils())/12;
             }
             //Otherwise we are Natural Gas
             else{
-              $temp->setCommission(($contract->getGasUsage() * $contract->getGasCommission())/12);
+              $commission = ($contract->getGasUsage() * $contract->getGasCommission())/12;
             }
             //Set the commission
-            $output[$contract->getRepName()][$temp->getDate()] += $temp->getCommission();
-            $output['Total'][$temp->getDate()] += $temp->getCommission();
+            $output[$contract->getRepName()][$date] += $commission;
+            $output['Total'][$date] += $commission;
           }
 
           //If we have no data for this date
           else{
             if($contract->getAnnualMWHs() > 0){
-              $temp->setCommission(($contract->getAnnualMWHs() * $contract->getMils())/12);
+              $commission = ($contract->getAnnualMWHs() * $contract->getMils())/12;
             }
             else{
-              $temp->setCommission(($contract->getGasUsage() * $contract->getGasCommission())/12);
+              $commission = ($contract->getGasUsage() * $contract->getGasCommission())/12;
             }
-            $output[$contract->getRepName()][$temp->getDate()] = $temp->getCommission();
-            $output['Total'][$temp->getDate()] += $temp->getCommission();
+            $output[$contract->getRepName()][$date] = $commission;
+            $output['Total'][$date] += $commission;
           }
         }
       }

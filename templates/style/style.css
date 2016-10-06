@@ -70,6 +70,12 @@ body{
     margin: auto;
 }
 
+#commission-content-top{
+    width: 400px;
+    max-width: 50%;
+    float: left;
+}
+
 .book-top-table{
     max-height: 300px;
     overflow-y: scroll;
