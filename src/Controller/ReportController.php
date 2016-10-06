@@ -77,7 +77,7 @@ class ReportController{
         $this->book();
       }
       if($_POST['report'] == 'commission'){
-        
+        $this->commission();
       }
     }
   }
@@ -110,6 +110,13 @@ class ReportController{
     $output = $report->controller($this->getConn());
     $this->setTemplate($this->getTwig()->loadTemplate('content.html.twig'));
     echo $this->getTemplate()->render(array('book_emp'  => $output[0], 'book_emp_bottom' => $output[1]));
+  }
+
+  public function commission(){
+    $report = new MonthlyCommission();
+    $output = $report->controller($this->getConn());
+    $this->setTemplate($this->getTwig()->loadTemplate('content.html.twig'));
+    echo $this->getTemplate()->render(array('commission'  => $output));
   }
 
   /**

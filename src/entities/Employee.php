@@ -36,6 +36,10 @@ class Employee implements JsonSerializable
   protected $gasFeeLost;
   protected $gasFeeTotal;
 
+  /** Total Variables */
+  protected $totalContracts;
+  protected $totalFeeE;
+  protected $totalFeeG;
   /**
    * Employee constructor.
    * @param $dbData -> Passed in database result set
@@ -69,6 +73,11 @@ class Employee implements JsonSerializable
     $this->gasFeeBack = 0;
     $this->gasFeeLost = 0;
     $this->gasFeeTotal = 0;
+
+    /** Total Variables **/
+    $this->totalContracts = 0;
+    $this->totalFeeE = 0;
+    $this->totalFeeG = 0;
   }
 
   /**
@@ -104,7 +113,12 @@ class Employee implements JsonSerializable
       'gasFeeWorking' => $this->getGasFeeWorking(),
       'gasFeeBack' => $this->getGasFeeBack(),
       'gasFeeLost' => $this->getGasFeeLost(),
-      'gasFeeTotal' => $this->getGasFeeTotal()
+      'gasFeeTotal' => $this->getGasFeeTotal(),
+
+      /** Total Variables **/
+      'totalContracts' => $this->getTotalContracts(),
+      'totalFeeE' => $this->getTotalFeeE(),
+      'totalFeeG' => $this->getTotalFeeG()
     ];
   }
 
@@ -491,5 +505,53 @@ class Employee implements JsonSerializable
   public function setGasFeeTotal($gasFeeTotal)
   {
     $this->gasFeeTotal = $gasFeeTotal;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getTotalContracts()
+  {
+    return $this->totalContracts;
+  }
+
+  /**
+   * @param mixed $totalContracts
+   */
+  public function setTotalContracts($totalContracts)
+  {
+    $this->totalContracts = $totalContracts;
+  }
+
+  /**
+   * @return int
+   */
+  public function getTotalFeeE()
+  {
+    return $this->totalFeeE;
+  }
+
+  /**
+   * @param int $totalFeeE
+   */
+  public function setTotalFeeE($totalFeeE)
+  {
+    $this->totalFeeE = $totalFeeE;
+  }
+
+  /**
+   * @return int
+   */
+  public function getTotalFeeG()
+  {
+    return $this->totalFeeG;
+  }
+
+  /**
+   * @param int $totalFeeG
+   */
+  public function setTotalFeeG($totalFeeG)
+  {
+    $this->totalFeeG = $totalFeeG;
   }
 }

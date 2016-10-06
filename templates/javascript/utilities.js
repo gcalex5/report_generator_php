@@ -72,8 +72,8 @@ function date_populate(dateArray){
   }
 }
 
-function generate_tabs(){
+function generate_tabs(div_id){
   $( function() {
-    $( "#book-content-top" ).tabs();
+    $( div_id ).tabs();
   });
 }

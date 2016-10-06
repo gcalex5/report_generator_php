@@ -1,6 +1,9 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 'BookOfBusiness.php' contains the necessary logic to generate a Book of Business
+ * Report. This contains data pertaining to Representatives/Employees contracts that
+ * are active during the requested date.
+ *
  * User: alex
  * Date: 9/26/16
  * Time: 12:09 PM
@@ -8,6 +11,8 @@
 
 /**
  * Class BookOfBusiness
+ *
+ * Class/Object that handles the creation of necessary data for the report
  */
 class BookOfBusiness{
   protected $repID = array();
@@ -25,6 +30,14 @@ class BookOfBusiness{
     $this->setDateY($_POST['dateY']);
   }
 
+  /**
+   * Controller function for Book of Business reports
+   * Calls the necessary functions to generate the report
+   * And returns the necessary output to generate the view
+   *
+   * @param $conn -> Passed in mysqli connection
+   * @return array -> returns an array containing the top/bottom outputs
+   */
   public function controller($conn){
     $this->setEmpArray(init_report_employee($conn));
 
@@ -92,6 +105,21 @@ class BookOfBusiness{
     return $contracts;
   }
 
+  /**
+   * Generate the necessary arrays to send data to the front end
+   * Loop contracts and assign them to 'Utility and Contract Objects'
+   * then put these into a 3D Array
+   * Top([RepID]->[Util Name]->[Contracts]) -> Allows us to create the tabbed
+   * U.I. and list contracts active during the date requested for the Rep
+   *
+   * Bottom([RepID]->[Util Name]->[Utility]) -> Allows us to total up the
+   * contracts, usage, fees each representative can achieve during the date
+   * requested for the report
+   *
+   * @param $contracts -> Passed in array of contract objects
+   * @return array -> Returns [OutputTop, OutputBottom] allowing the controller
+   * to return the expected data necessary for output
+   */
   protected function generateOutput($contracts){
     $outputTop = array(array());
     $outputBottom = array(array());
@@ -116,6 +144,8 @@ class BookOfBusiness{
         $util->setContracts(1);
         $util->setTotalAnnualFee($util->getAnnualFeeE() + $util->getAnnualFeeG());
         $outputBottom[$contract->getRepID()][$contract->getUtilityID()] = $util;
+        //Employee Totals
+        //TODO: Employee totals
       }
       //If this employee does have a record of the utility
       //Append the totals
@@ -134,10 +164,10 @@ class BookOfBusiness{
         $util->setTotalAnnualFee($util->getTotalAnnualFee() +
           ($util->getAnnualFeeE() + $util->getAnnualFeeG()));
         $outputBottom[$contract->getRepID()][$contract->getUtilityName()] = $util;
+        //Employee Totals
+        //TODO: employee totals
       }
     }
-    //TODO: Add a total entity for both top/bottom output
-
     //Workaround for first entry of array always being a blank entry
     if(sizeof($outputTop[0]) == 0){
       unset($outputTop[0]);

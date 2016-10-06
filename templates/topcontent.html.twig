@@ -297,6 +297,37 @@
         </div>
       {% endfor %}
     </div>
-    <script>generate_tabs();</script>
+    <script>generate_tabs('#book-content-top');</script>
+  {% endif %}
+
+  {% if commission %}
+    <div id="commission-content-top">
+      <ul>
+        {% for key,val in commission %}
+          <li><a href="#tabs-{{ key }}">{{ key }}</a></li>
+        {% endfor %}
+      </ul>
+      {% for key,val in commission %}
+        <div id="tabs-{{ key }}">
+          <div class="book-top-table">
+            <table id="{{ key }}">
+              <thead><tr>
+                <th>Date</th>
+                <th>Commission</th>
+              </tr></thead>
+              <tbody>
+              {% for key,com in val  %}
+                <tr>
+                  <td>{{ key }}</td>
+                  <td>${{ com|number_format(2, '.', ',') }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <script>generate_tabs('#commission-content-top');</script>
   {% endif %}
 {% endblock %}

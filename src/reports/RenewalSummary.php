@@ -1,7 +1,10 @@
 <?php
 /**
- * Provides the necessary functionality to
- * generate an Renewal Report
+ * 'RenewalSummary.php' contains the necessary logic to generate the data
+ * required to create a Renewal Summary. This is toggled between either Electric
+ * or Natural Gas based on user input. It will display both numeric and
+ * percentage based output as well as a list of contracts that are relevant to
+ * the time period queried. 
  *
  * User: alex
  * Date: 9/26/16
