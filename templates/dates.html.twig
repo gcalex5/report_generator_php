@@ -1,7 +1,7 @@
 <div class="dates">
   {% block dateselection %}
     <h2>Select The Date Boundaries</h2>
-    <div class="dateSelect">
+    <div id="dateSelect" class="dateSelect">
       <div class="standardDates">
         <h3>Standard Dates</h3>
         <div class="dateStart">
@@ -25,6 +25,6 @@
       </div>
     </div>
     <script>var dateArray = JSON.parse('{{ dates|json_encode|raw }}');
-      date_populate(dateArray)</script>
+      date_populate("#dateSelect", dateArray)</script>
   {% endblock %}
 </div>

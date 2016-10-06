@@ -79,6 +79,12 @@ class ReportController{
       if($_POST['report'] == 'commission'){
         $this->commission();
       }
+      if($_POST['report'] == 'init_combo_form'){
+        $this->init_combo_form();
+      }
+      if($_POST['report'] == 'combo'){
+        $this->combo();
+      }
     }
   }
 
@@ -117,6 +123,19 @@ class ReportController{
     $output = $report->controller($this->getConn());
     $this->setTemplate($this->getTwig()->loadTemplate('content.html.twig'));
     echo $this->getTemplate()->render(array('commission'  => $output));
+  }
+
+  public function init_combo_form(){
+    $reps = query_reps($this->getConn());
+    $dates = query_date_ranges($this->getConn());
+    $this->setTemplate($this->getTwig()->loadTemplate('content.html.twig'));
+    echo $this->getTemplate()->render(array('combo_form' => true, 'reps' => $reps, 'dates' => $dates));
+  }
+  public function combo(){
+    $report = new ComboReport();
+    $output = $report->controller($this->getConn());
+    $this->setTemplate($this->getTwig()->loadTemplate('content.html.twig'));
+    echo $this->getTemplate()->render(array('combo' => true, 'E' => $output[0], 'G' => $output[1], 'B' => $output[2], 'C' => $output[3]));
   }
 
   /**

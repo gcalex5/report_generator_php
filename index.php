@@ -11,6 +11,7 @@ include 'src/tools/queries.php';
 include 'src/reports/RenewalSummary.php';
 include 'src/reports/BookOfBusiness.php';
 include 'src/reports/MonthlyCommission.php';
+include 'src/reports/ComboReport.php';
 include 'src/entities/Employee.php';
 include 'src/entities/Contract.php';
 include 'src/entities/Utility.php';

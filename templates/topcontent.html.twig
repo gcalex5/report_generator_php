@@ -330,4 +330,74 @@
     </div>
     <script>generate_tabs('#commission-content-top');</script>
   {% endif %}
+
+  {% if combo_form %}
+    {% if reps %}
+      <div class="reps" style="float: left;">
+        {% block replist %}
+          <div id="combo-rep-list" class="rep-list">
+            <script>var repList = JSON.parse('{{ reps|json_encode|raw }}');</script>
+            {% for rep in reps %}
+              <input type="checkbox" name="employee" data-emp-type="{{ rep.getTitle() }}"
+                value="{{ rep.getID() }}">{{ rep.getFirst() }} {{ rep.getLast }}</input><br>
+            {% endfor %}
+          </div>
+          <div class="rep-list-selectors">
+            <input id="select-all" type="button" value="Select All"
+              onclick="rep_select('#combo-rep-list', 'all')">
+            <input id="select-all-reps" type="button" value="Select All Reps"
+              onclick="rep_select('#combo-rep-list', 'Rep')">
+            <input id="select-all-agents" type="button" value="Select All Agents"
+              onclick="rep_select('#combo-rep-list', 'Agent')">
+          </div>
+        {% endblock %}
+      </div>
+    {% endif %}
+    {% if dates %}
+      <div id="combo-date-selection" class="date-selections" style="float: left;">
+        {% block datelist %}
+          <div class="electric-dates">
+            <h3>Electric</h3>
+            <select id="dateCEM"></select>
+            <select id="dateCEY"></select>
+          </div>
+          <div class="natural-gas-dates">
+            <h3>Natural Gas</h3>
+            <select id="dateCGM"></select>
+            <select id="dateCGY"></select>
+          </div>
+          <div class="book-of-business-dates">
+            <h3>Commission</h3>
+            <select id="dateCBM"></select>
+            <select id="dateCBY"></select>
+          </div>
+          <div class="commission-dates">
+            <h3>Commission Dates</h3>
+            <div class="dateStart">
+              <h4>Start Date</h4>
+              <select id="dateCCSM"></select>
+              <select id="dateCCSY"></select>
+            </div>
+            <div class="dateEnd">
+              <h4>End Date</h4>
+              <select id="dateCCEM"></select>
+              <select id="dateCCEY"></select>
+            </div>
+          </div>
+          <script>var dateArray = JSON.parse('{{ dates|json_encode|raw }}');
+            date_populate("#combo-date-selection", dateArray)</script>
+        {% endblock %}
+      </div>
+    {% endif %}
+    <button id="combo" type="button"
+      onclick="comboReportCall()">Run Report</button>
+  {% endif %}
+
+  {% if combo %}
+    {{ dump(combo) }}
+    {{ dump(E) }}
+    {{ dump(G) }}
+    {{ dump(B) }}
+    {{ dump(C) }}
+  {% endif %}
 {% endblock %}
